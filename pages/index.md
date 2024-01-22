@@ -6,14 +6,6 @@ queries:
 - customers.sql
 ---
 
-<BarChart
-  data={orders_by_month}
-  x=order_month
-  y=total_sales
-  yFmt="$###,###,k"
-  title="Monthly Sales"
-/>
-
 ```sql orders_by_repeat_status
 select 
   repeat_status,
@@ -25,30 +17,6 @@ from ${orders}
 group by 1, 2
 order by 1, 2
 ```
-
-
-<BarChart
-  data={orders_by_repeat_status}
-  x=order_month
-  y=total_sales
-  series=repeat_status
-  title="Monthly Sales by Repeat Status"
-  yFmt="$###,###,k"
-/>
-
-## AOV
-
-<BarChart
-  data={orders_by_repeat_status}
-  x=order_month
-  y=avg_order_value
-  yFmt="$#,###"
-  type=grouped
-  series=repeat_status
-  title="Average Order Value (USD)"
-/>
-
-## Order and Customer Counts
 
 ```sql customer_count
 select 
@@ -68,8 +36,91 @@ left join ${orders_by_month} o
 on c.first_order_month = o.order_month
 ```
 
+<Tabs>
+  <Tab label='Order Dashboard'>
+
+
+```sql customer_type
+select 'Consumer' as customer_type union all select 'B2B' as customer_type
+```
+
+```sql date_range
+select strftime(min(invoice_date),'%Y-%m-%d') as test_date from ${orders} 
+union all 
+select strftime(max(invoice_date),'%Y-%m-%d') as test_date from ${orders}
+```
+
+
+
+<Dropdown data={customer_type} name=customer_type value=customer_type title="Customer Type"/>
+
+<Dropdown data={date_range} name=date_range value=test_date title="Date Range"/>
+
+
+
+
+
+<div class="grid grid-cols-2 gap-4">
+<div>
+
+<BarChart
+  data={orders_by_repeat_status}
+  x=order_month
+  y=avg_order_value
+  yFmt="$#,###"
+  type=grouped
+  series=repeat_status
+  title="Average Order Value (USD)"
+/>
+
+
+
 <LineChart
   data={customer_and_order_count}
   x=first_order_month
   title="Order and Customer Count by Period"
 />
+
+</div>
+
+  
+<div>
+
+<BarChart
+  data={orders_by_month}
+  x=order_month
+  y=total_sales
+  yFmt="$###,###,k"
+  title="Monthly Sales"
+  chartAreaHeight=465
+/>
+
+</div>
+</div>
+
+
+
+  </Tab>
+  <Tab label='Customer Retention'>
+    Customer Retention Content
+
+  </Tab>
+  <Tab label='Dollar Retention'>
+    Dollar Retention Content
+  </Tab>
+  <Tab label='Cohort LTV'>
+    Cohort LTV Content
+  </Tab>
+  <Tab label='Top Product Analysis'>
+    Top Product Analysis Content
+  </Tab>
+  <Tab label='Top Products by Customer Type'>
+    Top Products by Customer Type Content
+  </Tab>
+  <Tab label='Refunds'>
+    Refunds Content
+  </Tab>
+  <Tab label='Order Location'>
+    Order Location Content
+  </Tab>
+</Tabs>
