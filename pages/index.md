@@ -1,4 +1,4 @@
-<Tabs>
+<Tabs id=tab color='#2165b0'>
 <Tab label='Order Dashboard'>
 
 ```orders_by_month
@@ -60,12 +60,20 @@ select strftime(max(invoice_date),'%Y-%m-%d') as test_date from ecommerce.orders
   type=grouped
   series=repeat_status
   title="Average Order Value (USD)"
+  echartsOptions={{ 
+    color: ['#2165b0', '#7a7fbd', '#57b4ad', '#8cb87a'],
+    textStyle: { fontFamily: 'Plus Jakarta Sans'}
+  }}
 />
 
 <LineChart
   data={customer_and_order_count}
   x=first_order_month
   title="Order and Customer Count by Period"
+  echartsOptions={{ 
+    color: ['#2165b0', '#7a7fbd', '#57b4ad', '#8cb87a'],
+    textStyle: { fontFamily: 'Plus Jakarta Sans'}
+  }}
 />
 
 </div>
@@ -79,6 +87,10 @@ select strftime(max(invoice_date),'%Y-%m-%d') as test_date from ecommerce.orders
   yFmt="$###,###,k"
   title="Monthly Sales"
   chartAreaHeight=465
+  echartsOptions={{ 
+    color: ['#2165b0', '#7a7fbd', '#57b4ad', '#8cb87a'],
+    textStyle: { fontFamily: 'Plus Jakarta Sans'}
+  }}
 />
 
 </div>
@@ -87,6 +99,8 @@ select strftime(max(invoice_date),'%Y-%m-%d') as test_date from ecommerce.orders
 </Tab>
 
 <Tab label='Customer Retention'>
+
+## Customer Retention
 
 ```sql cohort_size
 select
@@ -113,28 +127,26 @@ order by 1, 2
 PIVOT ${cohort_retention} ON month_offset USING first(retention_rate_pct)
 ```
 
-## Customer Retention
 
-<br/>
 
 <div class="ml-40 font-semibold text-sm">Months Since Cohort Start</div>
 
 <DataTable data={cohort_retention_pivot} rows=all>
   <Column id='cohort_month' title='Cohort' fmt='mmm yyyy'/>
   <Column id='cohort_size' title='Cohort Size'/>
-  <Column id='Month00_pct' fmt='0%' title='0' contentType=colorscale colorMax=1 colorMin=0/>
-  <Column id='Month01_pct' fmt='0%' title='1' contentType=colorscale colorMax=1 colorMin=0/>
-  <Column id='Month02_pct' fmt='0%' title='2' contentType=colorscale colorMax=1 colorMin=0/>
-  <Column id='Month03_pct' fmt='0%' title='3' contentType=colorscale colorMax=1 colorMin=0/>
-  <Column id='Month04_pct' fmt='0%' title='4' contentType=colorscale colorMax=1 colorMin=0/>
-  <Column id='Month05_pct' fmt='0%' title='5' contentType=colorscale colorMax=1 colorMin=0/>
-  <Column id='Month06_pct' fmt='0%' title='6' contentType=colorscale colorMax=1 colorMin=0/>
-  <Column id='Month07_pct' fmt='0%' title='7' contentType=colorscale colorMax=1 colorMin=0/>
-  <Column id='Month08_pct' fmt='0%' title='8' contentType=colorscale colorMax=1 colorMin=0/>
-  <Column id='Month09_pct' fmt='0%' title='9' contentType=colorscale colorMax=1 colorMin=0/>
-  <Column id='Month10_pct' fmt='0%' title='10' contentType=colorscale colorMax=1 colorMin=0/>
-  <Column id='Month11_pct' fmt='0%' title='11' contentType=colorscale colorMax=1 colorMin=0/>
-  <Column id='Month12_pct' fmt='0%' title='12' contentType=colorscale colorMax=1 colorMin=0/>
+  <Column id='Month00_pct' fmt='0%' title='0' contentType=colorscale scaleColor=blue colorMax=1 colorMin=0/>
+  <Column id='Month01_pct' fmt='0%' title='1' contentType=colorscale scaleColor=blue colorMax=1 colorMin=0/>
+  <Column id='Month02_pct' fmt='0%' title='2' contentType=colorscale scaleColor=blue colorMax=1 colorMin=0/>
+  <Column id='Month03_pct' fmt='0%' title='3' contentType=colorscale scaleColor=blue colorMax=1 colorMin=0/>
+  <Column id='Month04_pct' fmt='0%' title='4' contentType=colorscale scaleColor=blue colorMax=1 colorMin=0/>
+  <Column id='Month05_pct' fmt='0%' title='5' contentType=colorscale scaleColor=blue colorMax=1 colorMin=0/>
+  <Column id='Month06_pct' fmt='0%' title='6' contentType=colorscale scaleColor=blue colorMax=1 colorMin=0/>
+  <Column id='Month07_pct' fmt='0%' title='7' contentType=colorscale scaleColor=blue colorMax=1 colorMin=0/>
+  <Column id='Month08_pct' fmt='0%' title='8' contentType=colorscale scaleColor=blue colorMax=1 colorMin=0/>
+  <Column id='Month09_pct' fmt='0%' title='9' contentType=colorscale scaleColor=blue colorMax=1 colorMin=0/>
+  <Column id='Month10_pct' fmt='0%' title='10' contentType=colorscale scaleColor=blue colorMax=1 colorMin=0/>
+  <Column id='Month11_pct' fmt='0%' title='11' contentType=colorscale scaleColor=blue colorMax=1 colorMin=0/>
+  <Column id='Month12_pct' fmt='0%' title='12' contentType=colorscale scaleColor=blue colorMax=1 colorMin=0/>
 </DataTable>
 
 </Tab>
@@ -147,19 +159,19 @@ PIVOT ${cohort_retention} ON month_offset USING first(retention_rate_pct)
 <DataTable data={cohort_retention_pivot} rows=all>
   <Column id='cohort_month' title='Cohort' fmt='mmm yyyy'/>
   <Column id='cohort_size' title='Cohort Size'/>
-  <Column id='Month00_pct' fmt='0%' title='0' contentType=colorscale colorMax=1 colorMin=0/>
-  <Column id='Month01_pct' fmt='0%' title='1' contentType=colorscale colorMax=1 colorMin=0/>
-  <Column id='Month02_pct' fmt='0%' title='2' contentType=colorscale colorMax=1 colorMin=0/>
-  <Column id='Month03_pct' fmt='0%' title='3' contentType=colorscale colorMax=1 colorMin=0/>
-  <Column id='Month04_pct' fmt='0%' title='4' contentType=colorscale colorMax=1 colorMin=0/>
-  <Column id='Month05_pct' fmt='0%' title='5' contentType=colorscale colorMax=1 colorMin=0/>
-  <Column id='Month06_pct' fmt='0%' title='6' contentType=colorscale colorMax=1 colorMin=0/>
-  <Column id='Month07_pct' fmt='0%' title='7' contentType=colorscale colorMax=1 colorMin=0/>
-  <Column id='Month08_pct' fmt='0%' title='8' contentType=colorscale colorMax=1 colorMin=0/>
-  <Column id='Month09_pct' fmt='0%' title='9' contentType=colorscale colorMax=1 colorMin=0/>
-  <Column id='Month10_pct' fmt='0%' title='10' contentType=colorscale colorMax=1 colorMin=0/>
-  <Column id='Month11_pct' fmt='0%' title='11' contentType=colorscale colorMax=1 colorMin=0/>
-  <Column id='Month12_pct' fmt='0%' title='12' contentType=colorscale colorMax=1 colorMin=0/>
+  <Column id='Month00_pct' fmt='0%' title='0' contentType=colorscale scaleColor=blue colorMax=1 colorMin=0/>
+  <Column id='Month01_pct' fmt='0%' title='1' contentType=colorscale scaleColor=blue colorMax=1 colorMin=0/>
+  <Column id='Month02_pct' fmt='0%' title='2' contentType=colorscale scaleColor=blue colorMax=1 colorMin=0/>
+  <Column id='Month03_pct' fmt='0%' title='3' contentType=colorscale scaleColor=blue colorMax=1 colorMin=0/>
+  <Column id='Month04_pct' fmt='0%' title='4' contentType=colorscale scaleColor=blue colorMax=1 colorMin=0/>
+  <Column id='Month05_pct' fmt='0%' title='5' contentType=colorscale scaleColor=blue colorMax=1 colorMin=0/>
+  <Column id='Month06_pct' fmt='0%' title='6' contentType=colorscale scaleColor=blue colorMax=1 colorMin=0/>
+  <Column id='Month07_pct' fmt='0%' title='7' contentType=colorscale scaleColor=blue colorMax=1 colorMin=0/>
+  <Column id='Month08_pct' fmt='0%' title='8' contentType=colorscale scaleColor=blue colorMax=1 colorMin=0/>
+  <Column id='Month09_pct' fmt='0%' title='9' contentType=colorscale scaleColor=blue colorMax=1 colorMin=0/>
+  <Column id='Month10_pct' fmt='0%' title='10' contentType=colorscale scaleColor=blue colorMax=1 colorMin=0/>
+  <Column id='Month11_pct' fmt='0%' title='11' contentType=colorscale scaleColor=blue colorMax=1 colorMin=0/>
+  <Column id='Month12_pct' fmt='0%' title='12' contentType=colorscale scaleColor=blue colorMax=1 colorMin=0/>
 </DataTable>
 
 </Tab>
@@ -172,6 +184,8 @@ Content goes here
 </Tab>
 
 <Tab label='Top Product Analysis'>
+
+## Top Products (Total Quantity)
 
 ```sql ranked_products
 select
@@ -253,8 +267,6 @@ and products_sold > 0
 group by 1,2,3
 ```
 
-## Top Products (Total Quantity)
-
 <Dropdown name=range>
     <DropdownOption value="Zoomed"/>
     <DropdownOption value="Full Range"/>
@@ -271,6 +283,25 @@ group by 1,2,3
   yFmt="#0%"
   yMin=0.9
   yMax=1.0
+  echartsOptions={{ 
+    color: [
+      '#d2d2d1', // medium ash
+      //'#ece8e5',  // linen
+      //'#373b5e', // navy
+      '#7a7fbd', // peripurple
+      '#00aced', // blue
+      '#2165b0', // cobalt
+      '#57b4ad', // turquoise
+      '#8cb87a', // light green
+      '#0a2e7d', // royal blue
+      '#106a98', // sub-title
+      '#5aaad3', // sky blue
+      '#96ced6', // light blue
+      '#364351', // sub-nav
+      '#4c4e4f', // ash grey
+    ],
+    textStyle: { fontFamily: 'Plus Jakarta Sans'}
+  }}
 />
 
 {:else}
@@ -284,6 +315,25 @@ group by 1,2,3
   yFmt="#0%"
   yMin=0
   yMax=1.0
+  echartsOptions={{ 
+    color: [
+      '#d2d2d1', // medium ash
+      //'#ece8e5',  // linen
+      //'#373b5e', // navy
+      '#7a7fbd', // peripurple
+      '#00aced', // blue
+      '#2165b0', // cobalt
+      '#57b4ad', // turquoise
+      '#8cb87a', // light green
+      '#0a2e7d', // royal blue
+      '#106a98', // sub-title
+      '#5aaad3', // sky blue
+      '#96ced6', // light blue
+      '#364351', // sub-nav
+      '#4c4e4f', // ash grey
+    ],
+    textStyle: { fontFamily: 'Plus Jakarta Sans'}
+  }}
 />
 
 {/if}
@@ -298,7 +348,7 @@ group by 1,2,3
 
 <DataTable data={top_products} rows=all>
     <Column id=description_group/>
-    <Column id=products_sold fmt="#,###" contentType=colorscale colorMax=200000/>
+    <Column id=products_sold fmt="#,###" contentType=colorscale scaleColor=blue colorMax=200000/>
 </DataTable>
 </div>
 
@@ -308,7 +358,7 @@ group by 1,2,3
 
 <DataTable data={top_products} rows=all>
     <Column id=stockcode_group/>
-    <Column id=products_sold fmt="#,###" contentType=colorscale colorMax=200000/>
+    <Column id=products_sold fmt="#,###" contentType=colorscale scaleColor=blue colorMax=200000/>
 </DataTable>
 </div>
 
@@ -318,7 +368,7 @@ group by 1,2,3
 
 <DataTable data={top_categories} rows=all>
     <Column id=category/>
-    <Column id=products_sold fmt="#,###" contentType=colorscale colorMax=200000/>
+    <Column id=products_sold fmt="#,###" contentType=colorscale scaleColor=blue colorMax=200000/>
 </DataTable>
 
 </div>
@@ -328,6 +378,8 @@ group by 1,2,3
 </Tab>
 
 <Tab label='Top Products by Repeat Status'>
+
+## Products by Repeat Status
 
 ```sql top_products_by_repeat_status
 select
@@ -346,7 +398,7 @@ group by all
 
 ```sql top_products_by_repeat_status_grouped
 select
-    lower(description_group) as description_group,
+    upper(substring(description_group,1,1)) || lower(substring(description_group,2)) as description_group,
     repeat_status,
     sum(products_sold) as products_sold
 from ${top_products_by_repeat_status}
@@ -362,9 +414,9 @@ order by 3 desc
 
 <DataTable data={top_products_pivot} rows=all>
     <Column id=description_group/>
-    <Column id=Repeat fmt="#,###" contentType=colorscale colorMax=80000/>
-    <Column id=New fmt="#,###" contentType=colorscale colorMax=80000/>
-    <Column id=Unknown fmt="#,###" contentType=colorscale colorMax=80000/>
+    <Column id=Repeat fmt="#,###" contentType=colorscale scaleColor=blue colorMax=80000/>
+    <Column id=New fmt="#,###" contentType=colorscale scaleColor=blue colorMax=80000/>
+    <Column id=Unknown fmt="#,###" contentType=colorscale scaleColor=blue colorMax=80000/>
 </DataTable>
 
 </Tab>
@@ -442,6 +494,7 @@ echartsOptions={{
 				show: true,
 				text: ['More', 'Fewer'],
 			},
+    textStyle: { fontFamily: 'Plus Jakarta Sans'}
 }}
 />
 
