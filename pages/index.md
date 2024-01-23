@@ -336,11 +336,46 @@ group by 1,2,3
 
 </Tab>
 
-<Tab label='Top Products by Customer Type'>
+<Tab label='Top Products by Repeat Status'>
 
-## Top Products by Customer Type Content
+```sql top_products_by_repeat_status
+select 
+    oi.Description,
+    oi.StockCode,
+    o.repeat_status,
+    rp.description_group,
+    rp.stockcode_group,
+    sum(oi.Quantity) as products_sold,
+from ${order_items} oi 
+left join ${orders} o on oi.InvoiceNo = o.InvoiceNo
+left join ${ranked_products} rp on oi.Description = rp.Description
+where Quantity > 0
+group by all
+``` 
 
-Content goes here
+```sql top_products_by_repeat_status_grouped
+select 
+    lower(description_group) as description_group,
+    repeat_status,
+    sum(products_sold) as products_sold
+from ${top_products_by_repeat_status}
+where description_group != 'Other'
+group by 1,2
+order by products_sold desc
+```
+
+
+```sql top_products_pivot
+PIVOT ${top_products_by_repeat_status_grouped} ON repeat_status USING first(products_sold)
+order by 3 desc
+```
+
+<DataTable data={top_products_pivot} rows=all>
+    <Column id=description_group/>
+    <Column id=Repeat fmt="#,###" contentType=colorscale colorMax=80000/>
+    <Column id=New fmt="#,###" contentType=colorscale colorMax=80000/>
+    <Column id=Unknown fmt="#,###" contentType=colorscale colorMax=80000/>
+</DataTable>
 
 </Tab>
 <Tab label='Refunds'>
