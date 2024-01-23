@@ -102,25 +102,188 @@ select strftime(max(invoice_date),'%Y-%m-%d') as test_date from ${orders}
 
   </Tab>
   <Tab label='Customer Retention'>
-    Customer Retention Content
+    
+  ## Customer Retention Content
+  Content goes here
 
   </Tab>
   <Tab label='Dollar Retention'>
-    Dollar Retention Content
+  
+  ## Dollar Retention Content
+  Content goes here
+
   </Tab>
   <Tab label='Cohort LTV'>
-    Cohort LTV Content
+  
+  ## Cohort LTV Content
+
+  Content goes here
+  
   </Tab>
+
+
+```sql ranked_products
+select 
+    Description,
+    StockCode,
+    sum(Quantity) as products_sold,
+    sum(UnitPrice*Quantity) as total_sales,
+    row_number() over (order by products_sold desc) as rank,
+    case 
+        when rank <= 10 then Description
+        else 'Other'
+    end as description_group,
+    case 
+        when rank <= 10 then StockCode
+        else 'Other'
+    end as stockcode_group,
+    case 
+        when Description ilike '%bag%' then 'Bags'
+        when Description ilike '%mug%' then 'Mugs'
+        when Description ilike '%jar%' then 'Jars'
+        when Description ilike '%holder%' then 'Holders'
+        when Description ilike '%craft%' then 'Crafts'
+        when Description ilike '%decoration%' then 'Decorations'
+        else 'Other'
+    end as category
+from ${order_items}
+where Quantity > 0
+group by 1,2
+order by rank
+``` 
+
+
+
+```sql top_products
+select 
+    lower(description_group) as description_group,
+    stockcode_group,
+    sum(products_sold) as products_sold,
+    sum(total_sales) as total_sales,
+    sum(rank) as rank_sum
+from ${ranked_products}
+group by 1,2
+order by rank_sum
+```
+
+```sql top_categories
+select 
+    category,
+    sum(products_sold) as products_sold,
+    sum(total_sales) as total_sales,
+from ${ranked_products}
+group by 1
+order by products_sold desc
+```
+
+
+
+```ranked_products_monthly
+select 
+    oi.Description,
+    oi.StockCode,
+    rp.description_group,
+    rp.stockcode_group,
+    date_trunc('month', invoice_date) as month,
+    sum(Quantity) as products_sold,
+    sum(UnitPrice*Quantity) as total_sales,
+from ${order_items} oi
+left join ${ranked_products} rp on oi.Description = rp.Description
+group by 1,2,3,4,5
+order by month
+```
+
+```top_products_monthly
+select 
+    lower(description_group) as description_group,
+    stockcode_group,
+    month,
+    sum(products_sold) as products_sold,
+    sum(total_sales) as total_sales,
+from ${ranked_products_monthly}
+where description_group is not null
+group by 1,2,3
+```
+
   <Tab label='Top Product Analysis'>
-    Top Product Analysis Content
+  
+
+
+## Top Products (Total Quantity)
+
+<AreaChart
+    data={top_products_monthly}
+    x=month
+    y=products_sold
+    series=description_group
+    type=stacked100
+    yFmt="00%"
+/>
+
+
+
+
+<div class="grid grid-cols-3 gap-4">
+
+
+<div>
+
+## Top Products by Description
+
+<DataTable data={top_products} rows=all>
+    <Column id=description_group/>
+    <Column id=products_sold fmt="#,###" contentType=colorscale colorMax=100000/>
+</DataTable>
+</div>
+
+
+<div>
+
+## Top Products by StockCode
+
+<DataTable data={top_products} rows=all>
+    <Column id=stockcode_group/>
+    <Column id=products_sold fmt="#,###" contentType=colorscale colorMax=100000/>
+</DataTable>
+</div>
+
+<div>
+
+## Categories
+
+<DataTable data={top_categories} rows=all>
+    <Column id=category/>
+    <Column id=products_sold fmt="#,###" contentType=colorscale colorMax=100000/>
+</DataTable>
+
+</div>
+
+
+</div>
+
+
+
   </Tab>
+  
   <Tab label='Top Products by Customer Type'>
-    Top Products by Customer Type Content
+  
+  ## Top Products by Customer Type Content
+  
+  Content goes here
+
   </Tab>
   <Tab label='Refunds'>
-    Refunds Content
+
+  ## Refunds Content
+  
+  Content goes here
+
   </Tab>
   <Tab label='Order Location'>
-    Order Location Content
+  
+  ## Order Location Content
+
+  Content goes here
+
   </Tab>
 </Tabs>
