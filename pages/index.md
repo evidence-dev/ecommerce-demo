@@ -3,6 +3,9 @@
 
 ```orders_by_month
 select * from ecommerce.orders_by_month
+where order_month >= '${inputs.date_min}'
+  and order_month <= '${inputs.date_max}'
+order by order_month, total_sales desc
 ```
 
 ```sql orders_by_repeat_status
@@ -13,6 +16,8 @@ select
   count(*) as number_of_orders,
   sum(total_sales) / number_of_orders as avg_order_value
 from ecommerce.orders
+where order_month >= '${inputs.date_min}'
+  and order_month <= '${inputs.date_max}'
 group by 1, 2
 order by 1, 2
 ```
@@ -33,21 +38,25 @@ select
 from ${customer_count} c
 left join ecommerce.orders_by_month o
 on c.first_order_month = o.order_month
+where order_month >= '${inputs.date_min}'
+  and order_month <= '${inputs.date_max}'
 ```
 
 ```sql customer_type
 select 'Consumer' as customer_type union all select 'B2B' as customer_type
 ```
 
-```sql date_range
-select strftime(min(invoice_date),'%Y-%m-%d') as test_date from ecommerce.orders
-union all
-select strftime(max(invoice_date),'%Y-%m-%d') as test_date from ecommerce.orders
+```sql date_min
+select DISTINCT strftime((invoice_date),'%Y-%m-%d') as date from ecommerce.orders group by 1 order by 1
 ```
 
-<Dropdown data={customer_type} name=customer_type value=customer_type title="Customer Type"/>
+```sql date_max
+select DISTINCT strftime((invoice_date),'%Y-%m-%d') as date from ecommerce.orders group by 1 order by 1 desc
+```
 
-<Dropdown data={date_range} name=date_range value=test_date title="Date Range"/>
+<Dropdown data={date_min} name=date_min value=date title="Date Min"/>
+
+<Dropdown data={date_max} name=date_max value=date title="Date Max"/>
 
 <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
 <div>
@@ -212,6 +221,8 @@ select
         else 'Other'
     end as category
 from ecommerce.order_items
+where invoice_date >= '${inputs.date_min_products}'
+  and invoice_date <= '${inputs.date_max_products}'
 group by 1,2
 order by rank
 ```
@@ -250,6 +261,8 @@ select
     sum(UnitPrice*Quantity) as total_sales,
 from ecommerce.order_items oi
 left join ${ranked_products} rp on oi.Description = rp.Description
+where invoice_date >= '${inputs.date_min_products}'
+  and invoice_date <= '${inputs.date_max_products}'
 group by 1,2,3,4,5
 order by month
 ```
@@ -266,8 +279,13 @@ where description_group is not null
 and products_sold > 0
 group by 1,2,3
 ```
+<Dropdown data={date_min} name=date_min_products value=date title="Date Min"/>
 
-<Dropdown name=range>
+<Dropdown data={date_max} name=date_max_products value=date title="Date Max"/>
+
+
+
+<Dropdown name=range title="Axis Bounds">
     <DropdownOption value="Zoomed"/>
     <DropdownOption value="Full Range"/>
 </Dropdown>
