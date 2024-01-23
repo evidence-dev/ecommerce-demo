@@ -6,6 +6,10 @@ queries:
 - customers.sql
 ---
 
+
+<Tabs>
+<Tab label='Order Dashboard'>
+
 ```sql orders_by_repeat_status
 select 
   repeat_status,
@@ -36,8 +40,6 @@ left join ${orders_by_month} o
 on c.first_order_month = o.order_month
 ```
 
-<Tabs>
-  <Tab label='Order Dashboard'>
 
 
 ```sql customer_type
@@ -100,26 +102,98 @@ select strftime(max(invoice_date),'%Y-%m-%d') as test_date from ${orders}
 
 
 
-  </Tab>
-  <Tab label='Customer Retention'>
-    
-  ## Customer Retention Content
-  Content goes here
+</Tab>
+<Tab label='Customer Retention'>
 
-  </Tab>
-  <Tab label='Dollar Retention'>
-  
-  ## Dollar Retention Content
-  Content goes here
 
-  </Tab>
-  <Tab label='Cohort LTV'>
-  
-  ## Cohort LTV Content
+```sql cohort_size
+select
+  cohort_month,
+  count(*) as cohort_size
+from ${customers}
+group by 1
+```
 
-  Content goes here
-  
-  </Tab>
+```sql cohort_retention
+select
+  c.cohort_month,
+  first(cs.cohort_size) as cohort_size,
+  'Month' || lpad(date_diff('month', c.cohort_month, date_trunc('month', o.invoice_date))::varchar,2,0) || '_pct' as month_offset,
+  count(distinct o.customerId) / first(cs.cohort_size) as retention_rate_pct
+from ${customers} c
+left join ${orders} o on c.customerID = o.customerID
+left join ${cohort_size} cs on c.cohort_month = cs.cohort_month
+group by all
+order by 1, 2
+```
+
+```sql cohort_retention_pivot
+PIVOT ${cohort_retention} ON month_offset USING first(retention_rate_pct)
+```
+
+## Customer Retention
+
+<br/>
+
+<div class="ml-40 font-semibold text-sm">Months Since Cohort Start</div>
+
+<DataTable data={cohort_retention_pivot} rows=all>
+  <Column id='cohort_month' title='Cohort' fmt='mmm yyyy'/>
+  <Column id='cohort_size' title='Cohort Size'/>
+  <Column id='Month00_pct' fmt='0%' title='0' contentType=colorscale colorMax=1 colorMin=0/>
+  <Column id='Month01_pct' fmt='0%' title='1' contentType=colorscale colorMax=1 colorMin=0/>
+  <Column id='Month02_pct' fmt='0%' title='2' contentType=colorscale colorMax=1 colorMin=0/>
+  <Column id='Month03_pct' fmt='0%' title='3' contentType=colorscale colorMax=1 colorMin=0/>
+  <Column id='Month04_pct' fmt='0%' title='4' contentType=colorscale colorMax=1 colorMin=0/>
+  <Column id='Month05_pct' fmt='0%' title='5' contentType=colorscale colorMax=1 colorMin=0/>
+  <Column id='Month06_pct' fmt='0%' title='6' contentType=colorscale colorMax=1 colorMin=0/>
+  <Column id='Month07_pct' fmt='0%' title='7' contentType=colorscale colorMax=1 colorMin=0/>
+  <Column id='Month08_pct' fmt='0%' title='8' contentType=colorscale colorMax=1 colorMin=0/>
+  <Column id='Month09_pct' fmt='0%' title='9' contentType=colorscale colorMax=1 colorMin=0/>
+  <Column id='Month10_pct' fmt='0%' title='10' contentType=colorscale colorMax=1 colorMin=0/>
+  <Column id='Month11_pct' fmt='0%' title='11' contentType=colorscale colorMax=1 colorMin=0/>
+  <Column id='Month12_pct' fmt='0%' title='12' contentType=colorscale colorMax=1 colorMin=0/>
+</DataTable>
+
+</Tab>
+<Tab label='Dollar Retention'>
+
+## Dollar Retention
+
+<div class="ml-40 font-semibold text-sm">Months Since Cohort Start</div>
+
+<DataTable data={cohort_retention_pivot} rows=all>
+  <Column id='cohort_month' title='Cohort' fmt='mmm yyyy'/>
+  <Column id='cohort_size' title='Cohort Size'/>
+  <Column id='Month00_pct' fmt='0%' title='0' contentType=colorscale colorMax=1 colorMin=0/>
+  <Column id='Month01_pct' fmt='0%' title='1' contentType=colorscale colorMax=1 colorMin=0/>
+  <Column id='Month02_pct' fmt='0%' title='2' contentType=colorscale colorMax=1 colorMin=0/>
+  <Column id='Month03_pct' fmt='0%' title='3' contentType=colorscale colorMax=1 colorMin=0/>
+  <Column id='Month04_pct' fmt='0%' title='4' contentType=colorscale colorMax=1 colorMin=0/>
+  <Column id='Month05_pct' fmt='0%' title='5' contentType=colorscale colorMax=1 colorMin=0/>
+  <Column id='Month06_pct' fmt='0%' title='6' contentType=colorscale colorMax=1 colorMin=0/>
+  <Column id='Month07_pct' fmt='0%' title='7' contentType=colorscale colorMax=1 colorMin=0/>
+  <Column id='Month08_pct' fmt='0%' title='8' contentType=colorscale colorMax=1 colorMin=0/>
+  <Column id='Month09_pct' fmt='0%' title='9' contentType=colorscale colorMax=1 colorMin=0/>
+  <Column id='Month10_pct' fmt='0%' title='10' contentType=colorscale colorMax=1 colorMin=0/>
+  <Column id='Month11_pct' fmt='0%' title='11' contentType=colorscale colorMax=1 colorMin=0/>
+  <Column id='Month12_pct' fmt='0%' title='12' contentType=colorscale colorMax=1 colorMin=0/>
+</DataTable>
+
+
+</Tab>
+<Tab label='Cohort LTV'>
+
+## Cohort LTV Content
+
+Content goes here
+
+</Tab>
+
+
+
+<Tab label='Top Product Analysis'>
+
 
 
 ```sql ranked_products
@@ -205,9 +279,6 @@ where description_group is not null
 group by 1,2,3
 ```
 
-  <Tab label='Top Product Analysis'>
-  
-
 
 ## Top Products (Total Quantity)
 
@@ -263,27 +334,92 @@ group by 1,2,3
 
 
 
-  </Tab>
-  
-  <Tab label='Top Products by Customer Type'>
-  
-  ## Top Products by Customer Type Content
-  
-  Content goes here
+</Tab>
 
-  </Tab>
-  <Tab label='Refunds'>
+<Tab label='Top Products by Customer Type'>
 
-  ## Refunds Content
-  
-  Content goes here
+## Top Products by Customer Type Content
 
-  </Tab>
-  <Tab label='Order Location'>
-  
-  ## Order Location Content
+Content goes here
 
-  Content goes here
+</Tab>
+<Tab label='Refunds'>
 
-  </Tab>
+## Refunds Content
+
+Content goes here
+
+</Tab>
+<Tab label='Order Location'>
+
+## Order Location Content
+
+```sql order_location
+select 
+    CASE
+        WHEN Country = 'United Kingdom' THEN 'California'
+        WHEN Country = 'Germany' THEN 'New York'
+        WHEN Country = 'France' THEN 'Texas'
+        WHEN Country = 'EIRE' THEN 'Florida'
+        WHEN Country = 'Spain' THEN 'Illinois'
+        WHEN Country = 'Netherlands' THEN 'Ohio'
+        WHEN Country = 'Belgium' THEN 'Pennsylvania'
+        WHEN Country = 'Switzerland' THEN 'Michigan'
+        WHEN Country = 'Portugal' THEN 'Georgia'
+        WHEN Country = 'Australia' THEN 'North Carolina'
+        WHEN Country = 'Norway' THEN 'New Jersey'
+        WHEN Country = 'Italy' THEN 'Virginia'
+        WHEN Country = 'Channel Islands' THEN 'Washington'
+        WHEN Country = 'Finland' THEN 'Arizona'
+        WHEN Country = 'Cyprus' THEN 'Massachusetts'
+        WHEN Country = 'Sweden' THEN 'Indiana'
+        WHEN Country = 'Unspecified' THEN 'Tennessee'
+        WHEN Country = 'Austria' THEN 'Maryland'
+        WHEN Country = 'Denmark' THEN 'Wisconsin'
+        WHEN Country = 'Japan' THEN 'Missouri'
+        WHEN Country = 'Poland' THEN 'Minnesota'
+        WHEN Country = 'Israel' THEN 'Colorado'
+        WHEN Country = 'USA' THEN 'Oregon'
+        WHEN Country = 'Hong Kong' THEN 'Oklahoma'
+        WHEN Country = 'Singapore' THEN 'Kentucky'
+        WHEN Country = 'Iceland' THEN 'Louisiana'
+        WHEN Country = 'Canada' THEN 'Connecticut'
+        WHEN Country = 'Greece' THEN 'Alabama'
+        WHEN Country = 'Malta' THEN 'Iowa'
+        WHEN Country = 'United Arab Emirates' THEN 'Alaska'
+        WHEN Country = 'European Community' THEN 'Kansas'
+        WHEN Country = 'RSA' THEN 'Arkansas'
+        WHEN Country = 'Lebanon' THEN 'South Carolina'
+        WHEN Country = 'Lithuania' THEN 'Mississippi'
+        WHEN Country = 'Brazil' THEN 'Nebraska'
+        WHEN Country = 'Czech Republic' THEN 'Nevada'
+        WHEN Country = 'Bahrain' THEN 'Idaho'
+        WHEN Country = 'Saudi Arabia' THEN 'Montana'
+        ELSE Country 
+    END AS State,
+    count(*) as number_of_orders,
+    sum(UnitPrice*Quantity) as total_sales,
+from ${order_items}
+group by all
+order by 2 desc
+```
+
+<USMap
+  data={order_location}
+  state=State
+  value=number_of_orders
+  colorScale=bluegreen
+  max=20000
+  title="Number of Orders by State"
+  echartsOptions={{
+    visualMap: {
+				top: 'middle',
+				show: true,
+				text: ['More', 'Fewer'],
+			},
+}}
+/>
+
+
+</Tab>
 </Tabs>
