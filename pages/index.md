@@ -1,66 +1,55 @@
----
-queries:
-- orders.sql
-- order_items.sql 
-- orders_by_month.sql
-- customers.sql
----
-
-
 <Tabs>
 <Tab label='Order Dashboard'>
 
+```orders_by_month
+
+select * from ecommerce.orders_by_month
+
+```
+
 ```sql orders_by_repeat_status
-select 
+select
   repeat_status,
   date_trunc('month', invoice_date) as order_month,
   sum(total_sales) as total_sales,
   count(*) as number_of_orders,
   sum(total_sales) / number_of_orders as avg_order_value
-from ${orders}
+from ecommerce.orders
 group by 1, 2
 order by 1, 2
 ```
 
 ```sql customer_count
-select 
+select
   date_trunc('month', first_order) as first_order_month,
   count(*) as number_of_customers
-from ${customers}
+from ecommerce.customers
 group by 1
 ```
 
 ```sql customer_and_order_count
-select 
+select
   first_order_month,
   number_of_customers as number_of_new_customers,
   number_of_orders
 from ${customer_count} c
-left join ${orders_by_month} o
+left join ecommerce.orders_by_month o
 on c.first_order_month = o.order_month
 ```
-
-
 
 ```sql customer_type
 select 'Consumer' as customer_type union all select 'B2B' as customer_type
 ```
 
 ```sql date_range
-select strftime(min(invoice_date),'%Y-%m-%d') as test_date from ${orders} 
-union all 
-select strftime(max(invoice_date),'%Y-%m-%d') as test_date from ${orders}
+select strftime(min(invoice_date),'%Y-%m-%d') as test_date from ecommerce.orders
+union all
+select strftime(max(invoice_date),'%Y-%m-%d') as test_date from ecommerce.orders
 ```
-
-
 
 <Dropdown data={customer_type} name=customer_type value=customer_type title="Customer Type"/>
 
 <Dropdown data={date_range} name=date_range value=test_date title="Date Range"/>
-
-
-
-
 
 <div class="grid grid-cols-2 gap-4">
 <div>
@@ -75,8 +64,6 @@ select strftime(max(invoice_date),'%Y-%m-%d') as test_date from ${orders}
   title="Average Order Value (USD)"
 />
 
-
-
 <LineChart
   data={customer_and_order_count}
   x=first_order_month
@@ -85,7 +72,6 @@ select strftime(max(invoice_date),'%Y-%m-%d') as test_date from ${orders}
 
 </div>
 
-  
 <div>
 
 <BarChart
@@ -100,17 +86,15 @@ select strftime(max(invoice_date),'%Y-%m-%d') as test_date from ${orders}
 </div>
 </div>
 
-
-
 </Tab>
-<Tab label='Customer Retention'>
 
+<Tab label='Customer Retention'>
 
 ```sql cohort_size
 select
   cohort_month,
   count(*) as cohort_size
-from ${customers}
+from ecommerce.customers
 group by 1
 ```
 
@@ -120,8 +104,8 @@ select
   first(cs.cohort_size) as cohort_size,
   'Month' || lpad(date_diff('month', c.cohort_month, date_trunc('month', o.invoice_date))::varchar,2,0) || '_pct' as month_offset,
   count(distinct o.customerId) / first(cs.cohort_size) as retention_rate_pct
-from ${customers} c
-left join ${orders} o on c.customerID = o.customerID
+from ecommerce.customers c
+left join ecommerce.orders o on c.customerID = o.customerID
 left join ${cohort_size} cs on c.cohort_month = cs.cohort_month
 group by all
 order by 1, 2
@@ -180,7 +164,6 @@ PIVOT ${cohort_retention} ON month_offset USING first(retention_rate_pct)
   <Column id='Month12_pct' fmt='0%' title='12' contentType=colorscale colorMax=1 colorMin=0/>
 </DataTable>
 
-
 </Tab>
 <Tab label='Cohort LTV'>
 
@@ -190,28 +173,24 @@ Content goes here
 
 </Tab>
 
-
-
 <Tab label='Top Product Analysis'>
 
-
-
 ```sql ranked_products
-select 
+select
     Description,
     StockCode,
     sum(Quantity) as products_sold,
     sum(UnitPrice*Quantity) as total_sales,
     row_number() over (order by products_sold desc) as rank,
-    case 
+    case
         when rank <= 10 then Description
         else 'Other'
     end as description_group,
-    case 
+    case
         when rank <= 10 then StockCode
         else 'Other'
     end as stockcode_group,
-    case 
+    case
         when Description ilike '%bag%' then 'Bags'
         when Description ilike '%mug%' then 'Mugs'
         when Description ilike '%jar%' then 'Jars'
@@ -220,16 +199,14 @@ select
         when Description ilike '%decoration%' then 'Decorations'
         else 'Other'
     end as category
-from ${order_items}
+from ecommerce.order_items
 where Quantity > 0
 group by 1,2
 order by rank
-``` 
-
-
+```
 
 ```sql top_products
-select 
+select
     lower(description_group) as description_group,
     stockcode_group,
     sum(products_sold) as products_sold,
@@ -241,7 +218,7 @@ order by rank_sum
 ```
 
 ```sql top_categories
-select 
+select
     category,
     sum(products_sold) as products_sold,
     sum(total_sales) as total_sales,
@@ -250,10 +227,8 @@ group by 1
 order by products_sold desc
 ```
 
-
-
 ```ranked_products_monthly
-select 
+select
     oi.Description,
     oi.StockCode,
     rp.description_group,
@@ -261,14 +236,14 @@ select
     date_trunc('month', invoice_date) as month,
     sum(Quantity) as products_sold,
     sum(UnitPrice*Quantity) as total_sales,
-from ${order_items} oi
+from ecommerce.order_items oi
 left join ${ranked_products} rp on oi.Description = rp.Description
 group by 1,2,3,4,5
 order by month
 ```
 
 ```top_products_monthly
-select 
+select
     lower(description_group) as description_group,
     stockcode_group,
     month,
@@ -278,7 +253,6 @@ from ${ranked_products_monthly}
 where description_group is not null
 group by 1,2,3
 ```
-
 
 ## Top Products (Total Quantity)
 
@@ -291,11 +265,7 @@ group by 1,2,3
     yFmt="00%"
 />
 
-
-
-
 <div class="grid grid-cols-3 gap-4">
-
 
 <div>
 
@@ -306,7 +276,6 @@ group by 1,2,3
     <Column id=products_sold fmt="#,###" contentType=colorscale colorMax=100000/>
 </DataTable>
 </div>
-
 
 <div>
 
@@ -329,32 +298,29 @@ group by 1,2,3
 
 </div>
 
-
 </div>
-
-
 
 </Tab>
 
 <Tab label='Top Products by Repeat Status'>
 
 ```sql top_products_by_repeat_status
-select 
+select
     oi.Description,
     oi.StockCode,
     o.repeat_status,
     rp.description_group,
     rp.stockcode_group,
     sum(oi.Quantity) as products_sold,
-from ${order_items} oi 
-left join ${orders} o on oi.InvoiceNo = o.InvoiceNo
+from ecommerce.order_items oi
+left join ecommerce.orders o on oi.InvoiceNo = o.InvoiceNo
 left join ${ranked_products} rp on oi.Description = rp.Description
 where Quantity > 0
 group by all
-``` 
+```
 
 ```sql top_products_by_repeat_status_grouped
-select 
+select
     lower(description_group) as description_group,
     repeat_status,
     sum(products_sold) as products_sold
@@ -363,7 +329,6 @@ where description_group != 'Other'
 group by 1,2
 order by products_sold desc
 ```
-
 
 ```sql top_products_pivot
 PIVOT ${top_products_by_repeat_status_grouped} ON repeat_status USING first(products_sold)
@@ -390,7 +355,7 @@ Content goes here
 ## Order Location Content
 
 ```sql order_location
-select 
+select
     CASE
         WHEN Country = 'United Kingdom' THEN 'California'
         WHEN Country = 'Germany' THEN 'New York'
@@ -430,23 +395,23 @@ select
         WHEN Country = 'Czech Republic' THEN 'Nevada'
         WHEN Country = 'Bahrain' THEN 'Idaho'
         WHEN Country = 'Saudi Arabia' THEN 'Montana'
-        ELSE Country 
+        ELSE Country
     END AS State,
     count(*) as number_of_orders,
     sum(UnitPrice*Quantity) as total_sales,
-from ${order_items}
+from ecommerce.order_items
 group by all
 order by 2 desc
 ```
 
 <USMap
-  data={order_location}
-  state=State
-  value=number_of_orders
-  colorScale=bluegreen
-  max=20000
-  title="Number of Orders by State"
-  echartsOptions={{
+data={order_location}
+state=State
+value=number_of_orders
+colorScale=bluegreen
+max=20000
+title="Number of Orders by State"
+echartsOptions={{
     visualMap: {
 				top: 'middle',
 				show: true,
@@ -455,6 +420,6 @@ order by 2 desc
 }}
 />
 
-
 </Tab>
+-->
 </Tabs>
