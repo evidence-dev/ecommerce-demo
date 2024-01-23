@@ -2,9 +2,7 @@
 <Tab label='Order Dashboard'>
 
 ```orders_by_month
-
 select * from ecommerce.orders_by_month
-
 ```
 
 ```sql orders_by_repeat_status
@@ -51,7 +49,7 @@ select strftime(max(invoice_date),'%Y-%m-%d') as test_date from ecommerce.orders
 
 <Dropdown data={date_range} name=date_range value=test_date title="Date Range"/>
 
-<div class="grid grid-cols-2 gap-4">
+<div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
 <div>
 
 <BarChart
@@ -200,19 +198,19 @@ select
         else 'Other'
     end as category
 from ecommerce.order_items
-where Quantity > 0
 group by 1,2
 order by rank
 ```
 
 ```sql top_products
 select
-    lower(description_group) as description_group,
+    upper(substring(description_group,1,1)) || lower(substring(description_group,2)) as description_group,
     stockcode_group,
     sum(products_sold) as products_sold,
     sum(total_sales) as total_sales,
     sum(rank) as rank_sum
 from ${ranked_products}
+where products_sold > 0
 group by 1,2
 order by rank_sum
 ```
@@ -244,28 +242,55 @@ order by month
 
 ```top_products_monthly
 select
-    lower(description_group) as description_group,
+    upper(substring(description_group,1,1)) || lower(substring(description_group,2)) as description_group,
     stockcode_group,
     month,
     sum(products_sold) as products_sold,
     sum(total_sales) as total_sales,
 from ${ranked_products_monthly}
 where description_group is not null
+and products_sold > 0
 group by 1,2,3
 ```
 
 ## Top Products (Total Quantity)
 
+<Dropdown name=range>
+    <DropdownOption value="Zoomed"/>
+    <DropdownOption value="Full Range"/>
+</Dropdown>
+
+{#if inputs.range == "Zoomed"}
+
 <AreaChart
-    data={top_products_monthly}
-    x=month
-    y=products_sold
-    series=description_group
-    type=stacked100
-    yFmt="00%"
+  data={top_products_monthly}
+  x=month
+  y=products_sold
+  series=description_group
+  type=stacked100
+  yFmt="#0%"
+  yMin=0.9
+  yMax=1.0
 />
 
-<div class="grid grid-cols-3 gap-4">
+{:else}
+
+<AreaChart
+  data={top_products_monthly}
+  x=month
+  y=products_sold
+  series=description_group
+  type=stacked100
+  yFmt="#0%"
+  yMin=0
+  yMax=1.0
+/>
+
+{/if}
+
+
+
+<div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
 
 <div>
 
@@ -273,7 +298,7 @@ group by 1,2,3
 
 <DataTable data={top_products} rows=all>
     <Column id=description_group/>
-    <Column id=products_sold fmt="#,###" contentType=colorscale colorMax=100000/>
+    <Column id=products_sold fmt="#,###" contentType=colorscale colorMax=200000/>
 </DataTable>
 </div>
 
@@ -283,7 +308,7 @@ group by 1,2,3
 
 <DataTable data={top_products} rows=all>
     <Column id=stockcode_group/>
-    <Column id=products_sold fmt="#,###" contentType=colorscale colorMax=100000/>
+    <Column id=products_sold fmt="#,###" contentType=colorscale colorMax=200000/>
 </DataTable>
 </div>
 
@@ -293,7 +318,7 @@ group by 1,2,3
 
 <DataTable data={top_categories} rows=all>
     <Column id=category/>
-    <Column id=products_sold fmt="#,###" contentType=colorscale colorMax=100000/>
+    <Column id=products_sold fmt="#,###" contentType=colorscale colorMax=200000/>
 </DataTable>
 
 </div>
@@ -421,5 +446,5 @@ echartsOptions={{
 />
 
 </Tab>
--->
+
 </Tabs>
