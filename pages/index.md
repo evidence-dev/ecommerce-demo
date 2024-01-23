@@ -183,7 +183,7 @@ Content goes here
 
 </Tab>
 
-<Tab label='Top Product Analysis'>
+<Tab label='Top Products'>
 
 ## Top Products (Total Quantity)
 
@@ -377,7 +377,7 @@ group by 1,2,3
 
 </Tab>
 
-<Tab label='Top Products by Repeat Status'>
+<Tab label='Products by Repeat Status'>
 
 ## Products by Repeat Status
 
@@ -493,6 +493,16 @@ echartsOptions={{
 				top: 'middle',
 				show: true,
 				text: ['More', 'Fewer'],
+        inRange: {
+            color: [ // range of cobalts
+              '#c8dbf3',
+              '#a9c1df',
+              '#89a7cb',
+              '#6a8db7',
+              '#4b73a3',
+              '#2165b0',
+              ]
+        },
 			},
     textStyle: { fontFamily: 'Plus Jakarta Sans'}
 }}
