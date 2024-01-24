@@ -77,6 +77,7 @@
     BreadCrumbs,
     QueryStatus,
     ToastWrapper,
+    Header,
   } from "@evidence-dev/core-components";
 
   import { setContext } from "svelte";
@@ -107,7 +108,11 @@
   data-sveltekit-preload-data={prefetchStrategy}
   class="antialiased text-gray-900"
 >
-  <!-- <Header bind:mobileSidebarOpen {fullWidth} /> -->
+  {#if false}
+    <div class="mb-10">
+      <Header bind:mobileSidebarOpen fullWidth={true} />
+    </div>
+  {/if}
   <div
     class:w-full={fullWidth}
     class="print:w-[650px] mx-auto print:md:px-0 print:px-0 px-6 sm:px-8 md:px-12 flex justify-start"
@@ -118,6 +123,29 @@
     <main
       class="flex-1 overflow-x-hidden md:px-8 print:px-0 print:md:px-0 py-8"
     >
+      <div
+        class="w-full overflow-auto flex font-['Plus_Jakarta_Sans'] gap-4 capitalize justify-end mb-8 text-sm text-gray-700"
+      >
+        <a
+          class=" hover:text-blue-700 transition duration-200"
+          href="/"
+          class:text-blue-700={$page.url.pathname.toUpperCase() === "/"}
+        >
+          Dashboard
+        </a>
+        {#each fileTree?.children as file}
+          {#if file.children.length === 0 && file.href}
+            <a
+              class="hover:text-blue-700 transition duration-200"
+              href={file?.href}
+              class:text-blue-700={$page.url.pathname.toUpperCase() ===
+                file.href.toUpperCase() + "/"}
+            >
+              {file.label}
+            </a>
+          {/if}
+        {/each}
+      </div>
       <!-- <div class="print:hidden">
         {#if $page.route.id !== "/settings"}
           <BreadCrumbs {fileTree} />
