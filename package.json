@@ -15,6 +15,7 @@
   "type": "module",
   "dependencies": {
     "@evidence-dev/bigquery": "^2.0.3",
+    "@evidence-dev/component-utilities": "^2.0.2",
     "@evidence-dev/core-components": "^3.1.0",
     "@evidence-dev/csv": "^1.0.4",
     "@evidence-dev/databricks": "^1.0.2",
@@ -26,7 +27,6 @@
     "@evidence-dev/snowflake": "^1.0.2",
     "@evidence-dev/sqlite": "^2.0.2",
     "@evidence-dev/trino": "^1.0.3",
-    "yaml": "2.3.4",
     "@internationalized/date": "^3.5.1",
     "bits-ui": "^0.11.8",
     "clsx": "^2.0.0",
@@ -36,6 +36,7 @@
     "sveltekit-superforms": "^1.13.1",
     "tailwind-merge": "^2.2.0",
     "tailwind-variants": "^0.1.19",
+    "yaml": "2.3.4",
     "zod": "^3.22.4"
   },
   "overrides": {
