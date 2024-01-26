@@ -50,6 +50,7 @@ select
     category,
     sum(products_sold) as products_sold,
     sum(total_sales) as total_sales,
+    -0.03 + random() * (0.2) as change
 from ${ranked_products}
 group by 1
 order by products_sold desc
@@ -176,7 +177,7 @@ echartsOptions={{
 
 <DataTable data={top_products} rows=all>
     <Column id=description_group/>
-    <Column id=products_sold fmt="#,###" contentType=colorscale scaleColor=blue colorMax=200000/>
+    <Column id=products_sold fmt="#,##0" contentType=colorscale scaleColor=blue colorMax=200000/>
 </DataTable>
 </div>
 
@@ -186,7 +187,7 @@ echartsOptions={{
 
 <DataTable data={top_products} rows=all link=link>
     <Column id=stockcode_group/>
-    <Column id=products_sold fmt="#,###" contentType=colorscale scaleColor=blue colorMax=200000/>
+    <Column id=products_sold fmt="#,##0" contentType=colorscale scaleColor=blue colorMax=200000/>
 </DataTable>
 </div>
 
@@ -196,7 +197,8 @@ echartsOptions={{
 
 <DataTable data={top_categories} rows=all>
     <Column id=category/>
-    <Column id=products_sold fmt="#,###" contentType=colorscale scaleColor=blue colorMax=200000/>
+    <Column id=products_sold fmt="#,##0" contentType=colorscale scaleColor=blue colorMax=200000/>
+    <Column id=change contentType=delta fmt=pct1/>
 </DataTable>
 
 </div>
@@ -238,7 +240,7 @@ order by 3 desc
 
 <DataTable data={top_products_pivot} rows=all>
     <Column id=description_group/>
-    <Column id=Repeat fmt="#,###" contentType=colorscale scaleColor=blue colorMax=80000/>
-    <Column id=New fmt="#,###" contentType=colorscale scaleColor=blue colorMax=80000/>
-    <Column id=Unknown fmt="#,###" contentType=colorscale scaleColor=blue colorMax=80000/>
+    <Column id=Repeat fmt="#,##0" contentType=colorscale scaleColor=blue colorMax=80000/>
+    <Column id=New fmt="#,##0" contentType=colorscale scaleColor=blue colorMax=80000/>
+    <Column id=Unknown fmt="#,##0" contentType=colorscale scaleColor=blue colorMax=80000/>
 </DataTable>
