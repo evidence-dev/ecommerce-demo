@@ -52,15 +52,14 @@
         calendarEnd = current_day;
     }
 
-    // symbols so `lastStart !== calendarStart` doesn't get caught by undefineds
-    let lastStart: any = Symbol(), lastEnd: any = Symbol();
-    $: if (!selectedDateRange || (lastStart !== calendarStart) || (lastEnd !== calendarEnd)) {
+    // run once when selectedDateRange is defined
+    let once = true;
+    $: if (!selectedDateRange || once) {
         selectedDateRange = {
             start: calendarStart ?? fromDate(new Date(0), 'Etc/UTC'),
             end: calendarEnd ?? current_day
         };
-        lastStart = calendarStart;
-        lastEnd = calendarEnd;
+        once = !selectedDateRange;
     }
 
 	type Preset = {
