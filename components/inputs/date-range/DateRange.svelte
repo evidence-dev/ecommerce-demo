@@ -34,10 +34,12 @@
     );
   }
 
+  const future = new Date("3030-03-03T03:00:00.000Z");
+
   // reactive statements don't run in SSR so we just suck in everything
   $inputs[name] = {
     start: new Date(0).toISOString(),
-    end: new Date("3030-03-03T03:00:00.000Z").toISOString()
+    end: future.toISOString()
   };
 
   let selectedDateRange;
@@ -51,7 +53,7 @@
       ).toISOString(),
       end: (
         selectedDateRange.end?.toDate(getLocalTimeZone()) ??
-        new Date("2050-01-01T05:00:00.000Z")
+        future
       ).toISOString(),
     };
   }
