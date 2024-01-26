@@ -14,23 +14,34 @@ group by all
 order by 1 desc
 ```
 
+```seasons
+select '2011-11-01' as start_date, '2011-11-28' as end_date, 'Black Friday' as name
+```
 
 <BigValue 
-    data={order_volume} value=sales comparison=sales_growth_pct comparisonTitle="last week"/>
+    data={order_volume} value=sales comparison=sales_growth_pct comparisonTitle="last week" fmt=usd/>
 <BigValue 
     data={order_volume} value=orders comparison=orders_growth_pct comparisonTitle="last week"/>
 <BigValue 
-    data={order_volume} value=aov title="AOV" comparison=aov_growth_pct comparisonTitle="last week"/>
+    data={order_volume} value=aov title="AOV" comparison=aov_growth_pct comparisonTitle="last week" fmt=usd/>
 
 <LineChart 
     data={order_volume} 
     yAxisTitle="in Sales" 
     y=sales
     yFmt=usd
+    yMax=500000  
     echartsOptions={{
     color: ['#2165b0', '#7a7fbd', '#57b4ad', '#8cb87a'],
     yAxis: { axisLabel: { fontSize: 11.5 } },
+     xAxis: {
+        axisTick: {
+          show: false
+        }
+      },
     textStyle: { fontFamily: 'Plus Jakarta Sans'},
     grid: { left: 6 }
     }}
-/>
+>
+  <ReferenceArea data={seasons} xMin=start_date xMax=end_date label=name/>
+</LineChart>

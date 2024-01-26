@@ -61,29 +61,29 @@ select DISTINCT strftime((invoice_date),'%Y-%m-%d') as date from ecommerce.order
 <div>
 
 <BarChart
-data={orders_by_repeat_status}
-x=order_month
-y=avg_order_value
-yFmt="$#,###"
-type=grouped
-series=repeat_status
-title="Average Order Value (USD)"
-echartsOptions={{
-    color: ['#2165b0', '#7a7fbd', '#57b4ad', '#8cb87a'],
-    textStyle: { fontFamily: 'Plus Jakarta Sans'},
-    grid: {left: 6}
-  }}
+  data={orders_by_repeat_status}
+  x=order_month
+  y=avg_order_value
+  yFmt="$#,##0"
+  type=grouped
+  series=repeat_status
+  title="Average Order Value (USD)"
+  echartsOptions={{
+      color: ['#2165b0', '#7a7fbd', '#57b4ad', '#8cb87a'],
+      textStyle: { fontFamily: 'Plus Jakarta Sans'},
+      grid: {left: 6}
+    }}
 />
 
 <LineChart
-data={customer_and_order_count}
-x=first_order_month
-title="Order and Customer Count by Period"
-echartsOptions={{
-    color: ['#2165b0', '#7a7fbd', '#57b4ad', '#8cb87a'],
-    textStyle: { fontFamily: 'Plus Jakarta Sans'},
-    grid: {left: 6}
-  }}
+  data={customer_and_order_count}
+  x=first_order_month
+  title="Order and Customer Count by Period"
+  echartsOptions={{
+      color: ['#2165b0', '#7a7fbd', '#57b4ad', '#8cb87a'],
+      textStyle: { fontFamily: 'Plus Jakarta Sans'},
+      grid: {left: 6}
+    }}
 />
 
 </div>
@@ -91,17 +91,17 @@ echartsOptions={{
 <div>
 
 <BarChart
-data={orders_by_month}
-x=order_month
-y=total_sales
-yFmt="$###,###,k"
-title="Monthly Sales"
-chartAreaHeight=465
-echartsOptions={{
-    color: ['#2165b0', '#7a7fbd', '#57b4ad', '#8cb87a'],
-    textStyle: { fontFamily: 'Plus Jakarta Sans'},
-    grid: {left: 6}
-  }}
+  data={orders_by_month}
+  x=order_month
+  y=total_sales
+  yFmt="$###,##0,k"
+  title="Monthly Sales"
+  chartAreaHeight=465
+  echartsOptions={{
+      color: ['#2165b0', '#7a7fbd', '#57b4ad', '#8cb87a'],
+      textStyle: { fontFamily: 'Plus Jakarta Sans'},
+      grid: {left: 6}
+    }}
 />
 
 </div>
@@ -161,28 +161,28 @@ order by 2 desc
 ```
 
 <USMap
-data={order_location}
-state=State
-value=number_of_orders
-colorScale=bluegreen
-max=20000
-title="Number of Orders by State"
-echartsOptions={{
-    visualMap: {
-				top: 'middle',
-				show: true,
-				text: ['More', 'Fewer'],
-        inRange: {
-            color: [ // range of cobalts
-              '#c8dbf3',
-              '#a9c1df',
-              '#89a7cb',
-              '#6a8db7',
-              '#4b73a3',
-              '#2165b0',
-              ]
+  data={order_location}
+  state=State
+  value=number_of_orders
+  colorScale=bluegreen
+  max=20000
+  title="Number of Orders by State"
+  echartsOptions={{
+      visualMap: {
+          top: 'middle',
+          show: true,
+          text: ['More', 'Fewer'],
+          inRange: {
+              color: [ // range of cobalts
+                '#c8dbf3',
+                '#a9c1df',
+                '#89a7cb',
+                '#6a8db7',
+                '#4b73a3',
+                '#2165b0',
+                ]
+          },
         },
-			},
-    textStyle: { fontFamily: 'Plus Jakarta Sans'}
-}}
+      textStyle: { fontFamily: 'Plus Jakarta Sans'}
+  }}
 />

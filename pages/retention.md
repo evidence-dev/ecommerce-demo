@@ -29,9 +29,11 @@ PIVOT ${cohort_retention} ON month_offset USING first(retention_rate_pct)
 
 Customer Retention measures the percentage of each monthly customer cohort that purchases in a future month. Customer retention, cannot exceed 100%.
 
-<DataTable data={cohort_retention_pivot} rows=all>
+<CohortTable data={cohort_retention_pivot} periodTitle="Cohort Month"/>
+
+<!-- <DataTable data={cohort_retention_pivot} rows=all>
   <Column id='cohort_month' title='Cohort' fmt='mmm yyyy'/>
-  <Column id='cohort_size' title='Cohort Size'/>
+  <Column id='cohort_size' title='Cohort Size' align=center/>
   <Column id='Month00_pct' fmt='0%' title='0' contentType=colorscale scaleColor=blue colorMax=1 colorMin=0/>
   <Column id='Month01_pct' fmt='0%' title='1' contentType=colorscale scaleColor=blue colorMax=1 colorMin=0/>
   <Column id='Month02_pct' fmt='0%' title='2' contentType=colorscale scaleColor=blue colorMax=1 colorMin=0/>
@@ -45,15 +47,17 @@ Customer Retention measures the percentage of each monthly customer cohort that 
   <Column id='Month10_pct' fmt='0%' title='10' contentType=colorscale scaleColor=blue colorMax=1 colorMin=0/>
   <Column id='Month11_pct' fmt='0%' title='11' contentType=colorscale scaleColor=blue colorMax=1 colorMin=0/>
   <Column id='Month12_pct' fmt='0%' title='12' contentType=colorscale scaleColor=blue colorMax=1 colorMin=0/>
-</DataTable>
+</DataTable> -->
 
 ## Dollar Retention
 
 Dollar Retention measures the total revenue earned from each customer cohort monthly, as a percentage of the cohort's initial revenue. It is possible to achieve dollar retention greater than 100%.
 
-<DataTable data={cohort_retention_pivot} rows=all title="Dollar retention, months">
+<CohortTable data={cohort_retention_pivot} periodTitle="Cohort Month" sizeFmt=usd/>
+
+<!-- <DataTable data={cohort_retention_pivot} rows=all>
   <Column id='cohort_month' title='Cohort' fmt='mmm yyyy'/>
-  <Column id='cohort_size' title='Cohort Size' fmt='usd'/>
+  <Column id='cohort_size' title='Cohort Size' fmt='usd'align=center/>
   <Column id='Month00_pct' fmt='0%' title='0' contentType=colorscale scaleColor=blue colorMax=1 colorMin=0/>
   <Column id='Month01_pct' fmt='0%' title='1' contentType=colorscale scaleColor=blue colorMax=1 colorMin=0/>
   <Column id='Month02_pct' fmt='0%' title='2' contentType=colorscale scaleColor=blue colorMax=1 colorMin=0/>
@@ -67,7 +71,7 @@ Dollar Retention measures the total revenue earned from each customer cohort mon
   <Column id='Month10_pct' fmt='0%' title='10' contentType=colorscale scaleColor=blue colorMax=1 colorMin=0/>
   <Column id='Month11_pct' fmt='0%' title='11' contentType=colorscale scaleColor=blue colorMax=1 colorMin=0/>
   <Column id='Month12_pct' fmt='0%' title='12' contentType=colorscale scaleColor=blue colorMax=1 colorMin=0/>
-</DataTable>
+</DataTable> -->
 
 ## Blue Onion Benchmarks
 
@@ -76,3 +80,5 @@ Dollar Retention measures the total revenue earned from each customer cohort mon
 Benchmark Data Available on the Premiere Plan
 </span>
 </div>
+
+

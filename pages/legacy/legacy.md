@@ -65,7 +65,7 @@ select DISTINCT strftime((invoice_date),'%Y-%m-%d') as date from ecommerce.order
 data={orders_by_repeat_status}
 x=order_month
 y=avg_order_value
-yFmt="$#,###"
+yFmt="$#,##0"
 type=grouped
 series=repeat_status
 title="Average Order Value (USD)"
@@ -93,7 +93,7 @@ echartsOptions={{
 data={orders_by_month}
 x=order_month
 y=total_sales
-yFmt="$###,###,k"
+yFmt="$###,##0,k"
 title="Monthly Sales"
 chartAreaHeight=465
 echartsOptions={{
@@ -361,7 +361,7 @@ echartsOptions={{
 
 <DataTable data={top_products} rows=all>
     <Column id=description_group/>
-    <Column id=products_sold fmt="#,###" contentType=colorscale scaleColor=blue colorMax=200000/>
+    <Column id=products_sold fmt="#,##0" contentType=colorscale scaleColor=blue colorMax=200000/>
 </DataTable>
 </div>
 
@@ -371,7 +371,7 @@ echartsOptions={{
 
 <DataTable data={top_products} rows=all>
     <Column id=stockcode_group/>
-    <Column id=products_sold fmt="#,###" contentType=colorscale scaleColor=blue colorMax=200000/>
+    <Column id=products_sold fmt="#,##0" contentType=colorscale scaleColor=blue colorMax=200000/>
 </DataTable>
 </div>
 
@@ -381,7 +381,7 @@ echartsOptions={{
 
 <DataTable data={top_categories} rows=all>
     <Column id=category/>
-    <Column id=products_sold fmt="#,###" contentType=colorscale scaleColor=blue colorMax=200000/>
+    <Column id=products_sold fmt="#,##0" contentType=colorscale scaleColor=blue colorMax=200000/>
 </DataTable>
 
 </div>
@@ -427,9 +427,9 @@ order by 3 desc
 
 <DataTable data={top_products_pivot} rows=all>
     <Column id=description_group/>
-    <Column id=Repeat fmt="#,###" contentType=colorscale scaleColor=blue colorMax=80000/>
-    <Column id=New fmt="#,###" contentType=colorscale scaleColor=blue colorMax=80000/>
-    <Column id=Unknown fmt="#,###" contentType=colorscale scaleColor=blue colorMax=80000/>
+    <Column id=Repeat fmt="#,##0" contentType=colorscale scaleColor=blue colorMax=80000/>
+    <Column id=New fmt="#,##0" contentType=colorscale scaleColor=blue colorMax=80000/>
+    <Column id=Unknown fmt="#,##0" contentType=colorscale scaleColor=blue colorMax=80000/>
 </DataTable>
 
 </Tab>
