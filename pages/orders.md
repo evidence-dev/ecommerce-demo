@@ -2,8 +2,8 @@
 
 ```orders_by_month
 select * from ecommerce.orders_by_month
-where order_month >= '${inputs.date_min}'
-  and order_month <= '${inputs.date_max}'
+where order_month >= '${inputs.range.start}'
+  and order_month <= '${inputs.range.end}'
 order by order_month, total_sales desc
 ```
 
@@ -15,8 +15,8 @@ select
   count(*) as number_of_orders,
   sum(total_sales) / number_of_orders as avg_order_value
 from ecommerce.orders
-where order_month >= '${inputs.date_min}'
-  and order_month <= '${inputs.date_max}'
+where order_month >= '${inputs.range.start}'
+  and order_month <= '${inputs.range.end}'
 group by 1, 2
 order by 1, 2
 ```
@@ -37,8 +37,8 @@ select
 from ${customer_count} c
 left join ecommerce.orders_by_month o
 on c.first_order_month = o.order_month
-where order_month >= '${inputs.date_min}'
-  and order_month <= '${inputs.date_max}'
+where order_month >= '${inputs.range.start}'
+  and order_month <= '${inputs.range.end}'
 ```
 
 ```sql customer_type
@@ -53,9 +53,7 @@ select DISTINCT strftime((invoice_date),'%Y-%m-%d') as date from ecommerce.order
 select DISTINCT strftime((invoice_date),'%Y-%m-%d') as date from ecommerce.orders group by 1 order by 1 desc
 ```
 
-<Dropdown data={date_min} name=date_min value=date title="Date Min"/>
-
-<Dropdown data={date_max} name=date_max value=date title="Date Max"/>
+<DateRange name=range data=order_items dates=invoice_date/>
 
 <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
 <div>
