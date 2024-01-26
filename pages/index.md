@@ -1,3 +1,5 @@
+# KPI Dashboard
+
 ```order_volume
 
 select
@@ -24,7 +26,16 @@ Et officia sit ea ex tempor dolor esse aute. Magna ad nisi cillum nulla reprehen
 <BigValue data={order_volume} value=orders comparison=orders_growth_pct comparisonTitle="last week"/>
 <BigValue data={order_volume} value=aov title="AOV" comparison=aov_growth_pct comparisonTitle="last week"/>
 
-<LineChart data={order_volume} yAxisTitle="in Sales" y=sales/>
+<LineChart 
+    data={order_volume} 
+    yAxisTitle="in Sales" 
+    y=sales
+    yFmt=usd
+    echartsOptions={{
+    color: ['#2165b0', '#7a7fbd', '#57b4ad', '#8cb87a'],
+    yAxis: { axisLabel: { fontSize: 11.5 } }
+    }}
+/>
 
 <!-- <ButtonGroup name=period>
     <ButtonGroupItem valueLabel="Weekly" value="week" />

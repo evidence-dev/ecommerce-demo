@@ -70,7 +70,8 @@ series=repeat_status
 title="Average Order Value (USD)"
 echartsOptions={{
     color: ['#2165b0', '#7a7fbd', '#57b4ad', '#8cb87a'],
-    textStyle: { fontFamily: 'Plus Jakarta Sans'}
+    textStyle: { fontFamily: 'Plus Jakarta Sans'},
+    grid: {left: 6}
   }}
 />
 
@@ -80,7 +81,8 @@ x=first_order_month
 title="Order and Customer Count by Period"
 echartsOptions={{
     color: ['#2165b0', '#7a7fbd', '#57b4ad', '#8cb87a'],
-    textStyle: { fontFamily: 'Plus Jakarta Sans'}
+    textStyle: { fontFamily: 'Plus Jakarta Sans'},
+    grid: {left: 6}
   }}
 />
 
@@ -97,7 +99,8 @@ title="Monthly Sales"
 chartAreaHeight=465
 echartsOptions={{
     color: ['#2165b0', '#7a7fbd', '#57b4ad', '#8cb87a'],
-    textStyle: { fontFamily: 'Plus Jakarta Sans'}
+    textStyle: { fontFamily: 'Plus Jakarta Sans'},
+    grid: {left: 6}
   }}
 />
 
