@@ -33,7 +33,9 @@ Et officia sit ea ex tempor dolor esse aute. Magna ad nisi cillum nulla reprehen
     yFmt=usd
     echartsOptions={{
     color: ['#2165b0', '#7a7fbd', '#57b4ad', '#8cb87a'],
-    yAxis: { axisLabel: { fontSize: 11.5 } }
+    yAxis: { axisLabel: { fontSize: 11.5 } },
+    textStyle: { fontFamily: 'Plus Jakarta Sans'},
+    grid: { left: 6 }
     }}
 />
 
