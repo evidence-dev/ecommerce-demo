@@ -1,6 +1,6 @@
 # KPI Dashboard
 
-<DateRange name=range data={order_volume} date=week/> 
+<DateRange name=range data={order_volume} dates=week/> 
 
 {inputs.range.end}
 {inputs.range.start}

@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { Writable } from "svelte/store";
 
-  import DateRange from "./_DateRange.svelte";
+  import DateRange from "./RangeOfDates.svelte";
   import { getContext } from "svelte";
   import { INPUTS_CONTEXT_KEY } from "@evidence-dev/component-utilities/globalContexts";
   import type { QueryStore } from "@evidence-dev/query-store";
@@ -24,7 +24,9 @@
   export let dates: string | undefined;
 
   let query;
+  $: console.log({data, dates})
   $: if (data && dates) {
+    console.log({data, dates})
     const source = typeof data === "string" ? data : `(${data.text})`;
     query = buildQuery(
       `SELECT min(${dates}) as start, max(${dates}) as end FROM ${source}`,

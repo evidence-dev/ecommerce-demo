@@ -17,6 +17,8 @@
 	import * as Select from '$lib/shadcn/select/index.js';
 	import * as Popover from '$lib/shadcn/popover/index.js';
 
+    console.log("helwelfjiowefjweiofjwe")
+
 	const dfMedium = new DateFormatter('en-US', {
 		dateStyle: 'medium'
 	});
