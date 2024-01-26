@@ -49,12 +49,7 @@ Stock Code {$page.params.stockcode}
     yFmt=usd
     echartsOptions={{
       color: ['#2165b0', '#7a7fbd', '#57b4ad', '#8cb87a'],
-      textStyle: { fontFamily: 'Plus Jakarta Sans'}
+      textStyle: { fontFamily: 'Plus Jakarta Sans'},
+      grid: {left: 6}
     }}
 />
-
-<!-- <ButtonGroup name=period>
-    <ButtonGroupItem valueLabel="Weekly" value="week" />
-    <ButtonGroupItem valueLabel="Daily" value="day" />
-    <ButtonGroupItem valueLabel="Monthly" value="month" />
-</ButtonGroup> -->
