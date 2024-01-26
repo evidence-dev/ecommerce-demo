@@ -31,66 +31,59 @@
 
 	const current_day = today(getLocalTimeZone());
 
-	selectedDateRange = {
-		start: current_day,
-		end: current_day
-	};
 
 	let calendarStart: DateValue | undefined;
 	$: if (start instanceof Date) {
 		calendarStart = fromDate(start, 'Etc/UTC');
 	} else if (typeof start === 'string') {
 		const pieces = start.split('-');
-		if (pieces.length !== 3) break $;
 		calendarStart = new CalendarDate(Number(pieces[0]), Number(pieces[1]), Number(pieces[2]));
-	}
+	} else {
+        calendarStart = fromDate(new Date(0), 'Etc/UTC');
+    }
 
 	let calendarEnd: DateValue | undefined;
 	$: if (end instanceof Date) {
 		calendarEnd = fromDate(end, 'Etc/UTC');
 	} else if (typeof end === 'string') {
 		const pieces = end.split('-');
-		if (pieces.length !== 3) break $;
 		calendarEnd = new CalendarDate(Number(pieces[0]), Number(pieces[1]), Number(pieces[2]));
-	}
+	} else {
+        calendarEnd = current_day;
+    }
 
-	$: if (
-		selectedDateRange.end?.toDate(getLocalTimeZone()) > calendarEnd?.toDate(getLocalTimeZone())
-	) {
-		selectedDateRange.end = calendarEnd;
-	}
-
-	$: if (
-		selectedDateRange.start?.toDate(getLocalTimeZone()) < calendarStart?.toDate(getLocalTimeZone())
-	) {
-		selectedDateRange.start = calendarStart;
-	} else if (
-		selectedDateRange.start?.toDate(getLocalTimeZone()) > calendarEnd?.toDate(getLocalTimeZone())
-	) {
-		selectedDateRange.start = calendarEnd;
-	}
+    // symbols so `lastStart !== calendarStart` doesn't get caught by undefineds
+    let lastStart: any = Symbol(), lastEnd: any = Symbol();
+    $: if (!selectedDateRange || (lastStart !== calendarStart) || (lastEnd !== calendarEnd)) {
+        selectedDateRange = {
+            start: calendarStart ?? fromDate(new Date(0), 'Etc/UTC'),
+            end: calendarEnd ?? current_day
+        };
+        lastStart = calendarStart;
+        lastEnd = calendarEnd;
+    }
 
 	type Preset = {
 		label: string;
 		range: DateRange;
 	};
 
-	const presets: Array<Preset> = [
+	$: presets = [
 		{
 			label: 'Last 7 Days',
 			range: {
-				start: current_day.subtract({ days: 7 }),
-				end: current_day
+				start: calendarEnd.subtract({ days: 7 }),
+				end: calendarEnd
 			}
 		},
 		{
 			label: 'Last 12 Months',
 			range: {
-				start: startOfMonth(current_day.subtract({ months: 12 })),
-				end: endOfMonth(current_day.subtract({ months: 1 }))
+				start: startOfMonth(calendarEnd.subtract({ months: 12 })),
+				end: endOfMonth(calendarEnd.subtract({ months: 1 }))
 			}
 		}
-	];
+	] as Preset[];
 
 	let selectedPreset: Preset | undefined = undefined;
 	let placeholder;

@@ -8,6 +8,7 @@
   import { buildQuery } from "@evidence-dev/component-utilities/buildQuery";
   import { getLocalTimeZone } from "@internationalized/date";
   import HiddenInPrint from "../shared/HiddenInPrint.svelte";
+  import { page } from "$app/stores";
 
   const inputs: Writable<object> = getContext(INPUTS_CONTEXT_KEY);
 
@@ -29,9 +30,15 @@
     query = buildQuery(
       `SELECT min(${dates}) as start, max(${dates}) as end FROM ${source}`,
       `DateRange-${name}`,
-      $query
+      $page.data.data[`DateRange-${name}`]
     );
   }
+
+  // reactive statements don't run in SSR so we just suck in everything
+  $inputs[name] = {
+    start: new Date(0).toISOString(),
+    end: new Date("3030-03-03T03:00:00.000Z").toISOString()
+  };
 
   let selectedDateRange;
   $: if (
@@ -44,7 +51,7 @@
       ).toISOString(),
       end: (
         selectedDateRange.end?.toDate(getLocalTimeZone()) ??
-        new Date("12-31-3030")
+        new Date("2050-01-01T05:00:00.000Z")
       ).toISOString(),
     };
   }

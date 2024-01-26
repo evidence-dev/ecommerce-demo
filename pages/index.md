@@ -1,9 +1,6 @@
 # KPI Dashboard
 
-<DateRange name=range data={order_volume} dates=week/> 
-
-{inputs.range.end}
-{inputs.range.start}
+<DateRange name=range data=order_items dates=invoice_date/>
 
 ```order_volume
 select
@@ -15,6 +12,7 @@ select
     orders/lag(orders, 1) over() -1 as orders_growth_pct,
     aov/lag(aov, 1) over() -1 as aov_growth_pct
 from order_items
+where invoice_date >= '${inputs.range.start}' and invoice_date <= '${inputs.range.end}'
 group by all
 order by 1 desc
 ```
@@ -23,19 +21,19 @@ order by 1 desc
 select '2011-11-01' as start_date, '2011-11-28' as end_date, 'Black Friday' as name
 ```
 
-<BigValue 
+<BigValue
     data={order_volume} value=sales comparison=sales_growth_pct comparisonTitle="last week" fmt=usd/>
-<BigValue 
+<BigValue
     data={order_volume} value=orders comparison=orders_growth_pct comparisonTitle="last week"/>
-<BigValue 
+<BigValue
     data={order_volume} value=aov title="AOV" comparison=aov_growth_pct comparisonTitle="last week" fmt=usd/>
 
-<LineChart 
-    data={order_volume} 
-    yAxisTitle="in Sales" 
+<LineChart
+    data={order_volume}
+    yAxisTitle="in Sales"
     y=sales
     yFmt=usd
-    yMax=500000  
+    yMax=500000
     echartsOptions={{
     color: ['#2165b0', '#7a7fbd', '#57b4ad', '#8cb87a'],
     yAxis: { axisLabel: { fontSize: 11.5 } },
