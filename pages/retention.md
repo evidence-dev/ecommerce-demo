@@ -71,8 +71,8 @@ Dollar Retention measures the total revenue earned from each customer cohort mon
 
 ## Blue Onion Benchmarks
 
-<div class="rounded-sm px-2  border-2 border-dashed w-full h-64 border-blue-200 border bg-blue-50 text-blue-800 text-lg flex content-center mt-4">
-
-Benchmark Data Available on Premiere Plan
-
+<div class="rounded px-2  border-3 border-dashed w-full h-72 border-blue-200 border bg-blue-50 text-lg flex items-center mt-4 font-bold text-blue-900">
+<span class="mx-auto">
+Benchmark Data Available on the Premiere Plan
+</span>
 </div>

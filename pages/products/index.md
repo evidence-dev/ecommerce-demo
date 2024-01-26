@@ -35,6 +35,7 @@ order by rank
 select
     upper(substring(description_group,1,1)) || lower(substring(description_group,2)) as description_group,
     stockcode_group,
+    if(stockcode_group = 'Other', '',stockcode_group) as link,
     sum(products_sold) as products_sold,
     sum(total_sales) as total_sales,
     sum(rank) as rank_sum
@@ -183,7 +184,7 @@ echartsOptions={{
 
 ### Top Products by StockCode
 
-<DataTable data={top_products} rows=all>
+<DataTable data={top_products} rows=all link=link>
     <Column id=stockcode_group/>
     <Column id=products_sold fmt="#,###" contentType=colorscale scaleColor=blue colorMax=200000/>
 </DataTable>

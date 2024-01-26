@@ -108,7 +108,7 @@
   data-sveltekit-preload-data={prefetchStrategy}
   class="antialiased text-gray-900"
 >
-  {#if false}
+  {#if dev}
     <div class="mb-10">
       <Header bind:mobileSidebarOpen fullWidth={true} />
     </div>
