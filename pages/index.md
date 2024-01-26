@@ -1,5 +1,7 @@
 # KPI Dashboard
 
+<DateRange /> 
+
 ```order_volume
 select
     date_trunc('week', invoice_date) as week,
