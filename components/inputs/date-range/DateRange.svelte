@@ -24,9 +24,7 @@
   export let dates: string | undefined;
 
   let query;
-  $: console.log({data, dates})
   $: if (data && dates) {
-    console.log({data, dates})
     const source = typeof data === "string" ? data : `(${data.text})`;
     query = buildQuery(
       `SELECT min(${dates}) as start, max(${dates}) as end FROM ${source}`,
