@@ -5,17 +5,19 @@
 		CalendarDate,
 		DateFormatter,
 		getLocalTimeZone,
-		today,
 		startOfMonth,
-		endOfMonth,
-		type DateValue,
-		fromDate
+		endOfMonth
 	} from '@internationalized/date';
-	import { cn } from '$lib/utils.js';
-	import { Button } from '$lib/shadcn/button/index.js';
-	import { RangeCalendar } from '$lib/shadcn/range-calendar/index.js';
-	import * as Select from '$lib/shadcn/select/index.js';
-	import * as Popover from '$lib/shadcn/popover/index.js';
+	import { cn } from '../../utils.js';
+	import { Button } from '../../shadcn/button/index.js';
+	import { RangeCalendar } from '../../shadcn/range-calendar/index.js';
+	import * as Select from '../../shadcn/select/index.js';
+	import * as Popover from '../../shadcn/popover/index.js';
+
+    function YYYYMMDDToCalendar(yyyymmdd: string) {
+        const pieces = yyyymmdd.split('-');
+        return new CalendarDate(Number(pieces[0]), Number(pieces[1]), Number(pieces[2]));
+    }
 
 	const dfMedium = new DateFormatter('en-US', {
 		dateStyle: 'medium'
@@ -26,40 +28,20 @@
 	});
 
 	export let selectedDateRange: DateRange | undefined;
-	export let start: string | Date | undefined;
-	export let end: string | Date | undefined;
+	export let start: string;
+	export let end: string;
 
-	const current_day = today(getLocalTimeZone());
+	$: calendarStart = YYYYMMDDToCalendar(start);
+    $: calendarEnd = YYYYMMDDToCalendar(end);
 
-
-	let calendarStart: DateValue | undefined;
-	$: if (start instanceof Date) {
-		calendarStart = fromDate(start, 'Etc/UTC');
-	} else if (typeof start === 'string') {
-		const pieces = start.split('-');
-		calendarStart = new CalendarDate(Number(pieces[0]), Number(pieces[1]), Number(pieces[2]));
-	} else {
-        calendarStart = fromDate(new Date(0), 'Etc/UTC');
-    }
-
-	let calendarEnd: DateValue | undefined;
-	$: if (end instanceof Date) {
-		calendarEnd = fromDate(end, 'Etc/UTC');
-	} else if (typeof end === 'string') {
-		const pieces = end.split('-');
-		calendarEnd = new CalendarDate(Number(pieces[0]), Number(pieces[1]), Number(pieces[2]));
-	} else {
-        calendarEnd = current_day;
-    }
-
-    // run once when selectedDateRange is defined
+    // run once when selectedDateRange is undefined and once when it is defined
     let once = true;
     $: if (!selectedDateRange || once) {
-        selectedDateRange = {
-            start: calendarStart ?? fromDate(new Date(0), 'Etc/UTC'),
-            end: calendarEnd ?? current_day
-        };
         once = !selectedDateRange;
+        selectedDateRange = {
+            start: calendarStart,
+            end: calendarEnd
+        };
     }
 
 	type Preset = {
