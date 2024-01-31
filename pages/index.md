@@ -1,5 +1,9 @@
 # KPI Dashboard
 
+This projects demonstrates using Evidence to create a KPI dashboard using ecommerce data.
+
+It also uses custom fonts and colours.
+
 <DateRange name=range data=order_items dates=invoice_date/>
 
 ```order_volume
@@ -35,16 +39,29 @@ select '2011-11-01' as start_date, '2011-11-28' as end_date, 'Black Friday' as n
     yFmt=usd
     yMax=500000
     echartsOptions={{
-    color: ['#2165b0', '#7a7fbd', '#57b4ad', '#8cb87a'],
-    yAxis: { axisLabel: { fontSize: 11.5 } },
-     xAxis: {
-        axisTick: {
-          show: false
-        }
-      },
-    textStyle: { fontFamily: 'Plus Jakarta Sans'},
-    grid: { left: 6 }
+color: [
+  // '#003f5c', // Dark Teal
+  // '#2f4b7c', // Royal Blue
+  // '#665191', // Deep Purple
+  '#a05195', // Orchid
+  '#d45087', // Magenta
+  '#f95d6a', // Coral
+  '#ff7c43', // Orange
+  '#ffa600', // Amber
+  '#92a8d1', // Periwinkle
+  '#c5cae9', // Lavender
+  '#7f7caf', // Slate Blue
+  '#ffb74d'  // Dark Peach
+],
+      yAxis: { axisLabel: { fontSize: 11.5 } },
+      xAxis: {
+          axisTick: {
+            show: false
+          }
+        },
+      textStyle: { fontFamily: 'Playfair Display'},
+      grid: { left: 6 }
     }}
 >
-  <ReferenceArea data={seasons} xMin=start_date xMax=end_date label=name/>
+  <ReferenceArea data={seasons} xMin=start_date xMax=end_date label=name color=red/>
 </LineChart>

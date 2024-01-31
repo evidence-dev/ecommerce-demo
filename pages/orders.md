@@ -67,8 +67,21 @@ select DISTINCT strftime((invoice_date),'%Y-%m-%d') as date from ecommerce.order
   series=repeat_status
   title="Average Order Value (USD)"
   echartsOptions={{
-      color: ['#2165b0', '#7a7fbd', '#57b4ad', '#8cb87a'],
-      textStyle: { fontFamily: 'Plus Jakarta Sans'},
+color: [
+  // '#003f5c', // Dark Teal
+  // '#2f4b7c', // Royal Blue
+  '#665191', // Deep Purple
+  '#a05195', // Orchid
+  '#d45087', // Magenta
+  '#f95d6a', // Coral
+  '#ff7c43', // Orange
+  '#ffa600', // Amber
+  '#92a8d1', // Periwinkle
+  '#c5cae9', // Lavender
+  '#7f7caf', // Slate Blue
+  '#ffb74d'  // Dark Peach
+],
+      textStyle: { fontFamily: 'Playfair Display'},
       grid: {left: 6}
     }}
 />
@@ -78,8 +91,21 @@ select DISTINCT strftime((invoice_date),'%Y-%m-%d') as date from ecommerce.order
   x=first_order_month
   title="Order and Customer Count by Period"
   echartsOptions={{
-      color: ['#2165b0', '#7a7fbd', '#57b4ad', '#8cb87a'],
-      textStyle: { fontFamily: 'Plus Jakarta Sans'},
+color: [
+  // '#003f5c', // Dark Teal
+  // '#2f4b7c', // Royal Blue
+  '#665191', // Deep Purple
+  // '#a05195', // Orchid
+  // '#d45087', // Magenta
+  '#f95d6a', // Coral
+  '#ff7c43', // Orange
+  '#ffa600', // Amber
+  '#92a8d1', // Periwinkle
+  '#c5cae9', // Lavender
+  '#7f7caf', // Slate Blue
+  '#ffb74d'  // Dark Peach
+],
+      textStyle: { fontFamily: 'Playfair Display'},
       grid: {left: 6}
     }}
 />
@@ -96,10 +122,23 @@ select DISTINCT strftime((invoice_date),'%Y-%m-%d') as date from ecommerce.order
   title="Monthly Sales"
   chartAreaHeight=465
   echartsOptions={{
-      color: ['#2165b0', '#7a7fbd', '#57b4ad', '#8cb87a'],
-      textStyle: { fontFamily: 'Plus Jakarta Sans'},
-      grid: {left: 6}
-    }}
+color: [
+  // '#003f5c', // Dark Teal
+  // '#2f4b7c', // Royal Blue
+  '#665191', // Deep Purple
+  '#a05195', // Orchid
+  '#d45087', // Magenta
+  '#f95d6a', // Coral
+  '#ff7c43', // Orange
+  '#ffa600', // Amber
+  '#92a8d1', // Periwinkle
+  '#c5cae9', // Lavender
+  '#7f7caf', // Slate Blue
+  '#ffb74d'  // Dark Peach
+],
+    textStyle: { fontFamily: 'Playfair Display'},
+    grid: {left: 6}
+  }}
 />
 
 </div>
@@ -171,16 +210,22 @@ order by 2 desc
           show: true,
           text: ['More', 'Fewer'],
           inRange: {
-              color: [ // range of cobalts
-                '#c8dbf3',
-                '#a9c1df',
-                '#89a7cb',
-                '#6a8db7',
-                '#4b73a3',
-                '#2165b0',
-                ]
+color: [
+  '#003f5c', // Dark Teal
+  '#2f4b7c', // Royal Blue
+  '#665191', // Deep Purple
+  '#a05195', // Orchid
+  '#d45087', // Magenta
+  '#f95d6a', // Coral
+  '#ff7c43', // Orange
+  '#ffa600', // Amber
+  //'#92a8d1', // Periwinkle
+  // '#c5cae9', // Lavender
+  // '#7f7caf', // Slate Blue
+  //'#ffb74d'  // Dark Peach
+],
           },
         },
-      textStyle: { fontFamily: 'Plus Jakarta Sans'}
+      textStyle: { fontFamily: 'Playfair Display'}
   }}
 />

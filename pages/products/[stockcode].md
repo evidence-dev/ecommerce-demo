@@ -34,7 +34,7 @@ group by all
 
 ```
 
-# <Value data={product_info} value=Description />
+# <Value data={product_info} column=Description />
 
 Stock Code {$page.params.stockcode}
 
@@ -48,8 +48,21 @@ Stock Code {$page.params.stockcode}
     y=sales
     yFmt=usd
     echartsOptions={{
-      color: ['#2165b0', '#7a7fbd', '#57b4ad', '#8cb87a'],
-      textStyle: { fontFamily: 'Plus Jakarta Sans'},
+color: [
+  '#003f5c', // Dark Teal
+  '#2f4b7c', // Royal Blue
+  '#665191', // Deep Purple
+  '#a05195', // Orchid
+  '#d45087', // Magenta
+  '#f95d6a', // Coral
+  '#ff7c43', // Orange
+  '#ffa600', // Amber
+  '#92a8d1', // Periwinkle
+  '#c5cae9', // Lavender
+  '#7f7caf', // Slate Blue
+  '#ffb74d'  // Dark Peach
+],
+      textStyle: { fontFamily: 'Playfair Display'},
       grid: {left: 6}
     }}
 />

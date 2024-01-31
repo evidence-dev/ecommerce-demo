@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500&display=swap');
 /* Write your global styles here, in PostCSS syntax */
 @tailwind base;
 @tailwind components;
@@ -47,7 +47,7 @@
 
 @layer components {
   .markdown {
-    @apply leading-normal font-['Plus_Jakarta_Sans'] text-base antialiased text-gray-700;
+    @apply leading-normal font-['Playfair_Display'] text-base antialiased text-gray-700;
   }
 
   img.markdown {
@@ -125,7 +125,7 @@
   h4.markdown,
   h5.markdown,
   h6.markdown {
-    @apply scroll-mt-14 break-inside-avoid font-['Plus_Jakarta_Sans'];
+    @apply scroll-mt-14 break-inside-avoid font-['Playfair_Display'];
     /* ensure that table of contents links scroll with room for the header */
   }
 
@@ -206,8 +206,8 @@
   --header-height: 3.5rem;
   /* Font stacks */
   --monospace-font-family: theme(fontFamily.mono);
-  --ui-font-family: [ "Plus_Jakarta_Sans", "sans-serif"];
-  --ui-font-family-compact: [ "Plus_Jakarta_Sans", "sans-serif"];
+  --ui-font-family: [ "Playfair_Display", "sans-serif"];
+  --ui-font-family-compact: [ "Playfair_Display", "sans-serif"];
   --color1: theme(colors.color.1);
   --color2: theme(colors.color.2);
   --color3: theme(colors.color.3);

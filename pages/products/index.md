@@ -1,4 +1,5 @@
-## Top Products (Total Quantity)
+## Top Products by Quantity
+
 
 ```sql ranked_products
 select
@@ -50,6 +51,7 @@ select
     category,
     sum(products_sold) as products_sold,
     sum(total_sales) as total_sales,
+    if(category = 'Other', '','/categories/' || category) as link,
     -0.03 + random() * (0.2) as change
 from ${ranked_products}
 group by 1
@@ -115,23 +117,24 @@ yFmt="#0%"
 yMin=0.9
 yMax=1.0
 echartsOptions={{
-    color: [
-      '#d2d2d1', // medium ash
-      //'#ece8e5',  // linen
-      //'#373b5e', // navy
-      '#7a7fbd', // peripurple
-      '#00aced', // blue
-      '#2165b0', // cobalt
-      '#57b4ad', // turquoise
-      '#8cb87a', // light green
-      '#0a2e7d', // royal blue
-      '#106a98', // sub-title
-      '#5aaad3', // sky blue
-      '#96ced6', // light blue
-      '#364351', // sub-nav
-      '#4c4e4f', // ash grey
-    ],
-    textStyle: { fontFamily: 'Plus Jakarta Sans'}
+color: [
+  '#003f5c', // Dark Teal
+  '#2f4b7c', // Royal Blue
+  '#665191', // Deep Purple
+  '#a05195', // Orchid
+  '#d45087', // Magenta
+  '#f95d6a', // Coral
+  '#ff7c43', // Orange
+  '#ffa600', // Amber
+  '#92a8d1', // Periwinkle
+  '#c5cae9', // Lavender
+  '#7f7caf', // Slate Blue
+  '#ffb74d'  // Dark Peach
+],
+    textStyle: { fontFamily: 'Playfair Display'},
+    xAxis: {
+        triggerEvent: true
+  }
   }}
 />
 
@@ -147,35 +150,33 @@ yFmt="#0%"
 yMin=0
 yMax=1.0
 echartsOptions={{
-    color: [
-      '#d2d2d1', // medium ash
-      //'#ece8e5',  // linen
-      //'#373b5e', // navy
-      '#7a7fbd', // peripurple
-      '#00aced', // blue
-      '#2165b0', // cobalt
-      '#57b4ad', // turquoise
-      '#8cb87a', // light green
-      '#0a2e7d', // royal blue
-      '#106a98', // sub-title
-      '#5aaad3', // sky blue
-      '#96ced6', // light blue
-      '#364351', // sub-nav
-      '#4c4e4f', // ash grey
-    ],
-    textStyle: { fontFamily: 'Plus Jakarta Sans'}
+color: [
+  '#003f5c', // Dark Teal
+  '#2f4b7c', // Royal Blue
+  '#665191', // Deep Purple
+  '#a05195', // Orchid
+  '#d45087', // Magenta
+  '#f95d6a', // Coral
+  '#ff7c43', // Orange
+  '#ffa600', // Amber
+  '#92a8d1', // Periwinkle
+  '#c5cae9', // Lavender
+  '#7f7caf', // Slate Blue
+  '#ffb74d'  // Dark Peach
+],
+    textStyle: { fontFamily: 'Playfair Display'}
   }}
 />
 
 {/if}
 
-<div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+<div class="grid grid-cols-1 gap-4 md:grid-cols-2">
 
 <div>
 
 ### Top Products by Description
 
-<DataTable data={top_products} rows=all>
+<DataTable data={top_products} rows=all link=link>
     <Column id=description_group/>
     <Column id=products_sold fmt="#,##0" contentType=colorscale scaleColor=blue colorMax=200000/>
 </DataTable>
@@ -195,7 +196,7 @@ echartsOptions={{
 
 ### Categories
 
-<DataTable data={top_categories} rows=all>
+<DataTable data={top_categories} rows=all link=link>
     <Column id=category/>
     <Column id=products_sold fmt="#,##0" contentType=colorscale scaleColor=blue colorMax=200000/>
     <Column id=change contentType=delta fmt=pct1/>

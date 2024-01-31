@@ -31,54 +31,42 @@ Customer Retention measures the percentage of each monthly customer cohort that 
 
 <CohortTable data={cohort_retention_pivot} periodTitle="Cohort Month"/>
 
-<!-- <DataTable data={cohort_retention_pivot} rows=all>
-  <Column id='cohort_month' title='Cohort' fmt='mmm yyyy'/>
-  <Column id='cohort_size' title='Cohort Size' align=center/>
-  <Column id='Month00_pct' fmt='0%' title='0' contentType=colorscale scaleColor=blue colorMax=1 colorMin=0/>
-  <Column id='Month01_pct' fmt='0%' title='1' contentType=colorscale scaleColor=blue colorMax=1 colorMin=0/>
-  <Column id='Month02_pct' fmt='0%' title='2' contentType=colorscale scaleColor=blue colorMax=1 colorMin=0/>
-  <Column id='Month03_pct' fmt='0%' title='3' contentType=colorscale scaleColor=blue colorMax=1 colorMin=0/>
-  <Column id='Month04_pct' fmt='0%' title='4' contentType=colorscale scaleColor=blue colorMax=1 colorMin=0/>
-  <Column id='Month05_pct' fmt='0%' title='5' contentType=colorscale scaleColor=blue colorMax=1 colorMin=0/>
-  <Column id='Month06_pct' fmt='0%' title='6' contentType=colorscale scaleColor=blue colorMax=1 colorMin=0/>
-  <Column id='Month07_pct' fmt='0%' title='7' contentType=colorscale scaleColor=blue colorMax=1 colorMin=0/>
-  <Column id='Month08_pct' fmt='0%' title='8' contentType=colorscale scaleColor=blue colorMax=1 colorMin=0/>
-  <Column id='Month09_pct' fmt='0%' title='9' contentType=colorscale scaleColor=blue colorMax=1 colorMin=0/>
-  <Column id='Month10_pct' fmt='0%' title='10' contentType=colorscale scaleColor=blue colorMax=1 colorMin=0/>
-  <Column id='Month11_pct' fmt='0%' title='11' contentType=colorscale scaleColor=blue colorMax=1 colorMin=0/>
-  <Column id='Month12_pct' fmt='0%' title='12' contentType=colorscale scaleColor=blue colorMax=1 colorMin=0/>
-</DataTable> -->
+
+```sql initial_cohort_revenue
+select
+  c.cohort_month,
+  cs.cohort_size,
+  sum(oi.quantity * oi.unitprice) as initial_revenue
+from ecommerce.customers c
+left join ecommerce.order_items oi on c.customerID = oi.customerID
+left join ${cohort_size} cs on c.cohort_month = cs.cohort_month
+where date_diff('month', c.cohort_month, date_trunc('month', oi.invoice_date)) = 0
+group by 1,2
+```
+
+
+```sql dollar_retention
+select
+  c.cohort_month,
+  icr.cohort_size,
+  'Month' || lpad(date_diff('month', c.cohort_month, date_trunc('month', oi.invoice_date))::varchar, 2, '0') || '_pct' as month_offset,
+  sum(oi.quantity * oi.unitprice) / first(icr.initial_revenue) as dollar_retention
+from ecommerce.customers c
+left join ecommerce.order_items oi on c.customerID = oi.customerID
+left join ${initial_cohort_revenue} icr on c.cohort_month = icr.cohort_month
+group by all
+order by 1, 2
+```
+
+```sql dollar_retention_pivot
+PIVOT ${dollar_retention} ON month_offset USING first(dollar_retention)
+```
+
 
 ## Dollar Retention
 
 Dollar Retention measures the total revenue earned from each customer cohort monthly, as a percentage of the cohort's initial revenue. It is possible to achieve dollar retention greater than 100%.
 
-<CohortTable data={cohort_retention_pivot} periodTitle="Cohort Month" sizeFmt=usd/>
-
-<!-- <DataTable data={cohort_retention_pivot} rows=all>
-  <Column id='cohort_month' title='Cohort' fmt='mmm yyyy'/>
-  <Column id='cohort_size' title='Cohort Size' fmt='usd'align=center/>
-  <Column id='Month00_pct' fmt='0%' title='0' contentType=colorscale scaleColor=blue colorMax=1 colorMin=0/>
-  <Column id='Month01_pct' fmt='0%' title='1' contentType=colorscale scaleColor=blue colorMax=1 colorMin=0/>
-  <Column id='Month02_pct' fmt='0%' title='2' contentType=colorscale scaleColor=blue colorMax=1 colorMin=0/>
-  <Column id='Month03_pct' fmt='0%' title='3' contentType=colorscale scaleColor=blue colorMax=1 colorMin=0/>
-  <Column id='Month04_pct' fmt='0%' title='4' contentType=colorscale scaleColor=blue colorMax=1 colorMin=0/>
-  <Column id='Month05_pct' fmt='0%' title='5' contentType=colorscale scaleColor=blue colorMax=1 colorMin=0/>
-  <Column id='Month06_pct' fmt='0%' title='6' contentType=colorscale scaleColor=blue colorMax=1 colorMin=0/>
-  <Column id='Month07_pct' fmt='0%' title='7' contentType=colorscale scaleColor=blue colorMax=1 colorMin=0/>
-  <Column id='Month08_pct' fmt='0%' title='8' contentType=colorscale scaleColor=blue colorMax=1 colorMin=0/>
-  <Column id='Month09_pct' fmt='0%' title='9' contentType=colorscale scaleColor=blue colorMax=1 colorMin=0/>
-  <Column id='Month10_pct' fmt='0%' title='10' contentType=colorscale scaleColor=blue colorMax=1 colorMin=0/>
-  <Column id='Month11_pct' fmt='0%' title='11' contentType=colorscale scaleColor=blue colorMax=1 colorMin=0/>
-  <Column id='Month12_pct' fmt='0%' title='12' contentType=colorscale scaleColor=blue colorMax=1 colorMin=0/>
-</DataTable> -->
-
-## Blue Onion Benchmarks
-
-<div class="rounded px-2  border-3 border-dashed w-full h-72 border-blue-200 border bg-blue-50 text-lg flex items-center mt-4 font-bold text-blue-900">
-<span class="mx-auto">
-Benchmark Data Available on the Premiere Plan
-</span>
-</div>
+<CohortTable data={dollar_retention_pivot} periodTitle="Cohort Month"/>
 
 
